@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.29</title>
+<title>우리 동네 짓기 v0.30</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -325,6 +325,9 @@ svg.i{display:block;flex:none}
 /* v0.9: 화질·속도 표시 */
 #fpsTag{right:96px;padding:3px 9px;border-radius:8px;background:rgba(29,39,56,.78);color:#fff;font:600 12.5px/1.4 var(--body);font-variant-numeric:tabular-nums;pointer-events:none}
 #fpsTag[hidden]{display:none}
+.slotrow{margin-top:10px;display:flex;justify-content:flex-end}.slotbtn{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--soft);border-radius:12px;min-height:44px;padding:6px 14px;color:var(--ink);font-size:14.5px}.slotbtn small{color:var(--muted);font-size:12.5px}
+.slots{display:grid;gap:8px;margin:14px 0 4px}.slot{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;background:var(--soft);border:2px solid transparent}.slot.cur{border-color:#f2c94c;background:#fdf6df}.slot.empty{opacity:.7}.slot .sn{flex:none;width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;font-family:var(--display);font-size:16px}.slot .si{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.slot .si b{font-size:15.5px}.slot .si b em{font-style:normal;font-size:12px;background:#f2c94c;color:#5a4300;border-radius:6px;padding:1px 6px;margin-left:4px}.slot .si span{font-size:12.5px;color:var(--muted)}.slot .sb{display:flex;gap:6px;flex:none}.slot .sb button{min-height:40px;padding:0 12px;border-radius:10px;border:0;font-size:14px}.slot .sload{background:var(--accent);color:var(--accent-ink)}.slot .sdel{background:#fff;color:#b4442c}.slot .sdel.sure{background:#d9573f;color:#fff}
+@media (max-width:560px){.slot{flex-wrap:wrap}.slot .sb{width:100%}.slot .sb button{flex:1}}
 #satPill,#scorePill{cursor:pointer}.sil{display:grid;gap:8px;margin:14px 0 4px}.sir{display:grid;grid-template-columns:96px 1fr 44px;align-items:center;gap:4px 10px;font-size:14px}.sir i{height:10px;border-radius:5px;background:var(--soft);overflow:hidden}.sir i b{display:block;height:100%;border-radius:5px}.sir em{font-style:normal;text-align:right;font-family:var(--display)}.sir small{grid-column:2/4;color:var(--muted);font-size:12.5px;margin-top:-3px}.sir.sc{grid-template-columns:1fr auto;padding:8px 12px;background:var(--soft);border-radius:10px}
 .item .price small{white-space:nowrap}.item .price small.upc{flex-basis:100%;margin:0;color:#8a5a2b}
 .opt small.svw{display:block;color:#9a2f1c;opacity:1}
@@ -464,6 +467,7 @@ svg.i{display:block;flex:none}
 (()=>{
 /* ================= 아이콘 ================= */
 const IC={
+  save:'M5 4h11l3 3v13H5zM8 4v5h7V4M8 20v-6h8v6',
   plan:'M4 4h16v16H4zM4 9h16M4 14h16M9 4v16M14 4v16',
   chat:'M4 5h16v11H9.5L5 20v-4H4z M8 9.5h8M8 12.5h5',
   battery:'M6 7h11v10H6zM17 10h2v4h-2M8.5 9.5v5M11 9.5v5M13.5 9.5v5',
@@ -526,7 +530,7 @@ const IC={
 const ico=(n,s=22,sw=2)=>'<svg class="i" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+IC[n]+'"/></svg>';
 
 /* ================= 기본 도구 ================= */
-let N=40;const TW=32,TH=16,DAYSEC=90,SAVEKEY='udongne-save-v2',STARKEY='udongne-stars-v2';
+let N=40;const TW=32,TH=16,DAYSEC=90,SAVEKEY0='udongne-save-v2',STARKEY='udongne-stars-v2';
 const game=document.getElementById('game'),cv=document.getElementById('city');let ctx=cv.getContext('2d');
 const QKEY='udongne-gfx-v1';let QUAL={mode:'auto',lvl:0,fps:false};try{const q0=JSON.parse(localStorage.getItem(QKEY)||'null');if(q0&&(q0.mode||'auto')==='auto')QUAL.lvl=Math.min(1,q0.lvl|0)}catch(e){}try{const q=JSON.parse(localStorage.getItem(QKEY)||'null');if(q){QUAL.mode=q.mode||'auto';QUAL.fps=!!q.fps}}catch(e){}
 const qlvl=()=>QUAL.mode==='auto'?QUAL.lvl:QUAL.mode==='high'?0:QUAL.mode==='mid'?1:2;
@@ -2565,9 +2569,10 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.29</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.30</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
-    '</div>',true);
+    '</div>'+(slotCount()?'<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>다른 도시 불러오기 · 지우기</small></button></div>':''),true);
+  if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
   $('mcard').querySelectorAll('[data-act]').forEach(b=>b.addEventListener('click',()=>{const a=b.dataset.act;snd('tick');closeModal();sel=null;if(a==='challenge'){chSetup();return}if(a==='demo'){demoPick();return}if(a==='scen'){scPick();return}if(a==='campaign'||a==='free'){chooseMap(a);return}idle=false;
     if(a==='continue'){if(!load()){newCity({mode:'campaign'});setTimeout(()=>toast('저장된 도시를 불러오지 못해서 새로 시작했어요. 예전 저장은 따로 보관해 두었어요.'),600)}}
     else if(a.startsWith('sc:')){newCity({mode:'scenario',sc:a.slice(3)});scenarioIntro()}
@@ -2584,12 +2589,12 @@ function chooseMap(m){let pick=m==='campaign'?CMAP:'classic',diff=1;const MIDS=m
   if($('mapRoll'))$('mapRoll').addEventListener('click',()=>{roll();draw();snd('tick')});
   $('mcard').querySelectorAll('[data-d]').forEach(b=>b.addEventListener('click',()=>{diff=+b.dataset.d;$('mcard').querySelectorAll('[data-d]').forEach(x=>x.setAttribute('aria-pressed',x===b));snd('tick')}));
   $('mapBack').addEventListener('click',()=>{closeModal();showStart()});
-  $('mapGo').addEventListener('click',()=>{const v=$('nameIn').value.trim();closeModal();idle=false;sel=null;newCity({mode:m,map:pick,seed:seeds[pick],diff,name:v?v.slice(0,10):'우리 동네'});if(diff===0)flags.disasters=true;running=true;setSpeedUI();renderInfo(true);if(m==='campaign')missionIntro();else{renderMission(true);save()}})}
+  $('mapGo').addEventListener('click',()=>{const v=$('nameIn').value.trim();closeModal();idle=false;sel=null;useNewSlot();newCity({mode:m,map:pick,seed:seeds[pick],diff,name:v?v.slice(0,10):'우리 동네'});if(diff===0)flags.disasters=true;running=true;setSpeedUI();renderInfo(true);if(m==='campaign')missionIntro();else{renderMission(true);save()}})}
 function scenarioIntro(){const s=SCEN[scId];openModal('<div class="eyebrow">'+ico(s.icon,16)+'시나리오 · '+esc(s.tag)+' · 제한 시간 '+timeText(s.limit)+'</div><h2>'+esc(s.name)+'</h2><p class="sub">'+esc(s.desc)+'</p><p class="sub"><b>목표</b>: '+s.goal.map(g=>esc(g[0])).join(', ')+'<br><b>예산</b>: '+fmt(s.money)+'</p><div class="opts"><button type="button" class="opt primary" id="sGo"><span>시작하기</span></button></div>');$('sGo').addEventListener('click',()=>closeModal())}
 
 /* ================= 저장 ================= */
 function save(){if(idle||demo||flags.demoCity)return;try{const d={v:4,hv:[...hv].reduce((a,v,k)=>(v&&a.push(k),a),[]),hz:[...mount].reduce((a,v,k)=>(v!==MAPD.mount[k]&&a.push([k,v]),a),[]),tun:[...tun].reduce((a,v,k)=>(v&&a.push(k),a),[]),map:MAPD.id,seed:MAPD.seed,mode,scId,missionIdx,unlocked:[...unlocked],flags,money,hours,windIdx,UL,goalStart:goal?goal.start:null,goalState,pop:stat.pop||0,cityName,tax,debt,quests,levee:[...levee].reduce((a,v,k)=>(v&&a.push(k),a),[]),
-  label:mode==='campaign'?cityName+' · 미션 '+(missionIdx+1):mode==='scenario'?'시나리오 · '+SCEN[scId].name:flags.ch?cityName+' · '+(flags.ch.min||15)+'분 도전':cityName+' · 자유 모드',
+  at:Date.now(),label:mode==='campaign'?cityName+' · 미션 '+(missionIdx+1):mode==='scenario'?'시나리오 · '+SCEN[scId].name:flags.ch?cityName+' · '+(flags.ch.min||15)+'분 도전':cityName+' · 자유 모드',
   road:[...road].reduce((a,v,k)=>(v&&a.push(k),a),[]),av:[...road].reduce((a,v,k)=>(v===2&&a.push(k),a),[]),things:things.map(o=>[o.kind,o.i,o.j,o.w,o.d,o.type||0,o.stage||0,o.seed||0,o.pine?1:0,o.build||0,o.sz||1,o.ruin||0,o.fence||0,o.ext||0,Math.round(o.fv||0),Math.round((o.wear||0)*10)/10,o.H||0,Math.round(o.st||0),o.aq==null?-1:Math.round(o.aq*10)/10,o.btT?Math.round(o.btT*100)/100:0,o.halt?Math.round(o.halt*10)/10:0,Math.round(o.gs||0)]),sns:SNS.slice(0,15),ret:[...ret].reduce((a,v,k)=>(v&&a.push(k),a),[]),quay:[...quay].reduce((a,v,k)=>(v&&a.push(k),a),[]),rw:[...rw].reduce((a,v,k)=>(road[k]&&v>=1&&a.push([k,Math.round(v)]),a),[])};
   localStorage.setItem(SAVEKEY,JSON.stringify(d))}catch(e){}}
 function load(){const d=savedInfo();if(!d)return false;try{baseWorld(d.map||'classic',d.seed||0);mode=d.mode;scId=d.scId;missionIdx=d.missionIdx||0;unlocked=new Set(d.unlocked);money=d.money;hours=d.hours;lastHour=Math.floor(hours);windIdx=d.windIdx;UL=d.UL||Object.assign({step:0},MAPD.ul);newTools=new Set();
@@ -2803,7 +2808,7 @@ function chSetup(pre){pre=pre||{};let no=pre.no||chNo(),min=pre.min||15,nm=pre.n
   ['tvN','tvS','tvC'].forEach(id=>$(id).addEventListener('input',tv));
   $('chBack').addEventListener('click',()=>{closeModal();showStart()});
   $('chGo').addEventListener('click',()=>{clearTimeout(tm);upd();const n=$('chNm').value.trim().slice(0,10);try{localStorage.setItem('udongne-chname',n)}catch(e){}closeModal();chStart({no,min,name:n})})}
-function chStart(o){idle=false;sel=null;const id=chMapOf(o.no);
+function chStart(o){idle=false;sel=null;useNewSlot();const id=chMapOf(o.no);
   newCity({mode:'free',map:id,seed:chSeedOf(o.no),diff:1,name:o.name||'우리 동네'});
   flags.disasters=false;flags.quests=false;quests=[];
   const L=chRecs()[o.no+'-'+o.min]||[];
@@ -2991,11 +2996,11 @@ function demoPick(){openModal('<div class="eyebrow">'+ico('eye',16)+'자동 시�
 
 /* v0.27: 처음 화면 정리 — 시나리오 고르기, 저장된 도시 경고 */
 const SCK=['river','smoke','power'];
-function svWarn(plain){const sv=savedInfo();if(!sv||(!(sv.pop>0)&&sv.hours<48))return '';const t='지금 저장된 도시('+(sv.label||'우리 동네')+' · 인구 '+fmt(sv.pop||0)+')는 사라져요';return plain?esc(t):'<small class="svw">'+esc(t)+'</small>'}
+function svWarn(plain){if(freeSlot())return '';const sv=savedInfo();if(!sv)return '';const t='저장 칸 '+SLOTN+'개가 다 찼어요. 지금 칸('+(sv.label||'우리 동네')+' · 인구 '+fmt(sv.pop||0)+')에 덮어써요';return plain?esc(t):'<small class="svw">'+esc(t)+'</small>'}
 function scPick(){const st=getStars();openModal('<div class="eyebrow">'+ico('water',16)+'시나리오</div><h2>어떤 도시를 고칠까요?</h2><p class="sub">문제가 생긴 도시를 제한 시간 안에 고쳐요. 미션 3(물·공기)·미션 8(전기)에서 배운 걸 써 봐요.</p><div class="modes">'+
   SCK.map(k=>{const c=SCEN[k];return '<button type="button" class="mode" data-sk="'+k+'"><div class="ci" style="background:'+c.col+'">'+ico(c.icon,22)+'</div><div><i>'+esc(c.tag)+(st[k]?' · '+'★'.repeat(st[k]):'')+'</i><b>'+esc(c.name)+'</b><span>'+esc(c.desc)+'</span></div></button>'}).join('')+
   '</div>'+(svWarn()?'<p class="sub svwp">'+svWarn(1)+'</p>':'')+'<div class="opts"><button type="button" class="opt" id="sBack"><span>처음 화면</span></button></div>',true);
-  $('mcard').querySelectorAll('[data-sk]').forEach(b=>b.addEventListener('click',()=>{snd('tick');closeModal();sel=null;idle=false;newCity({mode:'scenario',sc:b.dataset.sk});scenarioIntro();running=true;setSpeedUI();renderInfo(true);save()}));$('sBack').onclick=()=>{closeModal();showStart()}}
+  $('mcard').querySelectorAll('[data-sk]').forEach(b=>b.addEventListener('click',()=>{snd('tick');closeModal();sel=null;idle=false;useNewSlot();newCity({mode:'scenario',sc:b.dataset.sk});scenarioIntro();running=true;setSpeedUI();renderInfo(true);save()}));$('sBack').onclick=()=>{closeModal();showStart()}}
 
 /* v0.28: 운영비 보이기 */
 function upOf(kind,o){const f=FAC[kind];if(!f||!f.up)return 0;return f.up*(o?XM(o):1)*ECO().up*DIF().up}
@@ -3021,6 +3026,28 @@ function showScoreInfo(){const s=stat,p=Math.round((s.pop||0)*.5),a=Math.round((
    '<p class="sub"><b>환경 점수</b>는 100점에서 시작해요. 강이 바다로 나가는 하류의 물이 더러울수록(지금 −'+mq+'), 집이 있는 곳 공기가 나쁠수록(지금 −'+ar+') 깎여요. 하수 처리장을 짓고, 공장·발전소를 바람 아래쪽에 두면 올라가요.</p><p class="sub">인구만 늘리는 것보다 만족도(최대 400점)·환경(최대 300점)을 챙기는 게 점수에 커요.</p>';
   if(flags.ch){const P=chParts();h+='<p class="sub"><b>15분 도전 점수</b> = 인구 '+fmt(P.pop)+' × 배율 '+P.mul.toFixed(2)+' (1 + 만족도 '+P.a.toFixed(2)+' + 환경 '+P.b.toFixed(2)+' + 재생 에너지 '+P.g.toFixed(2)+') + 보너스 '+fmt(P.bon)+(P.debt?' − 빚 '+fmt(P.debt):'')+' = '+fmt(chScore())+'점</p>'}
   openModal(h+'<div class="opts"><button type="button" class="opt primary" id="siOk"><span>닫기</span></button></div>');$('siOk').onclick=()=>{snd('tick');closeModal()}}
+
+/* v0.30: 저장 칸 5개 */
+const SLOTN=5;let curSlot=1,SAVEKEY=SAVEKEY0;
+const slotKey=n=>n===1?SAVEKEY0:SAVEKEY0+'-s'+n;
+function slotInfo(n){try{const d=JSON.parse(localStorage.getItem(slotKey(n))||'null');return d&&d.v>=2&&d.v<=4?d:null}catch(e){return null}}
+function setSlot(n){curSlot=n;SAVEKEY=slotKey(n);try{localStorage.setItem('udongne-slot',String(n))}catch(e){}}
+const slotTrivial=d=>!d||(!(d.pop>0)&&d.hours<48);
+function slotCount(){let c=0;for(let n=1;n<=SLOTN;n++)if(slotInfo(n))c++;return c}
+function freeSlot(){if(slotTrivial(slotInfo(curSlot)))return curSlot;for(let n=1;n<=SLOTN;n++)if(!slotInfo(n))return n;return 0}
+function useNewSlot(){setSlot(freeSlot()||curSlot)}
+function slotWhen(t){if(!t)return '';const d=new Date(t);return (d.getMonth()+1)+'월 '+d.getDate()+'일 '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+function slotPick(){let rows='';for(let n=1;n<=SLOTN;n++){const d=slotInfo(n);
+    rows+='<div class="slot'+(n===curSlot&&d?' cur':'')+(d?'':' empty')+'"><div class="sn">'+n+'</div><div class="si">'+(d?'<b>'+esc(d.label||'저장된 도시')+(n===curSlot?' <em>지금</em>':'')+'</b><span>'+(Math.floor(d.hours/24)+1)+'일째 · 인구 '+fmt(d.pop||0)+(d.at?' · '+slotWhen(d.at)+' 저장':'')+chSvTxt(d)+'</span>':'<b>빈 칸</b><span>새 게임을 시작하면 여기에 저장돼요</span>')+'</div>'+
+      (d?'<div class="sb"><button type="button" class="sload" data-n="'+n+'">불러오기</button><button type="button" class="sdel" data-n="'+n+'">지우기</button></div>':'')+'</div>'}
+  openModal('<div class="eyebrow">'+ico('save',16)+'저장 칸</div><h2>어떤 도시를 할까요?</h2><p class="sub">이 기기(브라우저)에 도시를 '+SLOTN+'개까지 저장해요. 새 게임은 빈 칸에 저장되고, 칸이 다 차면 지금 칸에 덮어써요.</p><div class="slots">'+rows+'</div><div class="opts"><button type="button" class="opt" id="slBack"><span>처음 화면</span></button></div>',true);
+  $('slBack').onclick=()=>{snd('tick');closeModal();showStart()};
+  $('mcard').querySelectorAll('.sload').forEach(b=>b.onclick=()=>{snd('tick');setSlot(+b.dataset.n);closeModal();sel=null;idle=false;
+    if(!load()){newCity({mode:'campaign'});setTimeout(()=>toast('저장된 도시를 불러오지 못해서 새로 시작했어요. 예전 저장은 따로 보관해 두었어요.'),600)}
+    running=true;setSpeedUI();renderInfo(true);save()});
+  $('mcard').querySelectorAll('.sdel').forEach(b=>b.onclick=()=>{if(!b.classList.contains('sure')){b.classList.add('sure');b.textContent='정말 지울까요?';snd('warn');return}
+    try{localStorage.removeItem(slotKey(+b.dataset.n))}catch(e){}snd('tick');toast(b.dataset.n+'번 칸을 지웠어요.');slotPick()})}
+try{const n=+localStorage.getItem('udongne-slot');if(n>=1&&n<=SLOTN)setSlot(n)}catch(e){}
 /* ================= 시작 ================= */
 updateViews();
 idle=true;newCity({mode:'free',showcase:true});hours=9;lastHour=9;
