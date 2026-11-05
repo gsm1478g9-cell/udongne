@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.34</title>
+<title>우리 동네 짓기 v0.35</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -1695,22 +1695,34 @@ function drawRamp(vx,vy,i,j,rd,z0=0,rise=BH){const vd=vecV(rd[0],rd[1]),hf=(u,v)
   poly([Q(0,0),Q(1,0),Q(1,1),Q(0,1)],sc);
   if(vax===0){poly([Q(0,.14),Q(1,.14),Q(1,.86),Q(0,.86)],ac);line(Q(.12,.5),Q(.42,.5),'#f2d36b',1.3);line(Q(.58,.5),Q(.88,.5),'#f2d36b',1.3);rail(Q(0,.05),Q(1,.05),0,3);rail(Q(0,.95),Q(1,.95),0,3)}
   else{poly([Q(.14,0),Q(.86,0),Q(.86,1),Q(.14,1)],ac);line(Q(.5,.12),Q(.5,.42),'#f2d36b',1.3);line(Q(.5,.58),Q(.5,.88),'#f2d36b',1.3);rail(Q(.05,0),Q(.05,1),0,3);rail(Q(.95,0),Q(.95,1),0,3)}}
-function drawDeck(vx,vy,i,j){const ax=bridgeAxis(i,j),run=bridgeRun(i,j,ax),vd=vecV(ax?0:1,ax?1:0),vax=vd[0]?0:1,top=BH,bot=BH-3,dep=u=>5*Math.pow(Math.abs(2*u-1),2.2);
+function drawDeck(vx,vy,i,j){const ax=bridgeAxis(i,j),run=bridgeRun(i,j,ax),vd=vecV(ax?0:1,ax?1:0),vax=vd[0]?0:1,top=BH,bot=BH-6,dep=u=>0;
   poly(rect(vx+.1,vy+.18,1,.95,0),'rgba(20,45,70,.2)');
-  if(run.p>0){const bw=ax?[i+.5,j]:[i,j+.5],pv=toV(bw[0],bw[1]),c0=P(pv[0],pv[1],0);ell(c0[0],c0[1]+1,11,5.5,'rgba(255,255,255,.35)');box(pv[0]-.13,pv[1]-.13,.26,.26,0,bot-4,{l:'#c3cad2',r:'#a6aeb8',t:'#d6dbe1'},false)}
+  if(run.p>0&&run.p%3===0&&run.p<run.L-1&&!(run.L>=7&&bridgePy(run.L).includes(run.p))){const bw=ax?[i+.5,j]:[i,j+.5],pv=toV(bw[0],bw[1]),c0=P(pv[0],pv[1],0);ell(c0[0],c0[1]+1,11,5.5,'rgba(255,255,255,.35)');box(pv[0]-.17,pv[1]-.17,.34,.34,0,bot,{l:'#c9d0d8',r:'#a9b2bc',t:'#dde2e7'},false)}
   const fa=[],fb=[];if(vax===0){for(let s=0;s<=10;s++){const u=s/10;fa.push(P(vx+u,vy+1,top));fb.unshift(P(vx+u,vy+1,bot-dep(u)))}}else{for(let s=0;s<=10;s++){const u=s/10;fa.push(P(vx+1,vy+u,top));fb.unshift(P(vx+1,vy+u,bot-dep(u)))}}
-  poly(fa.concat(fb),vax===0?'#d4dae1':'#bcc4cd');line(fa[0],fa[fa.length-1],'rgba(255,255,255,.7)',.9);
+  poly(fa.concat(fb),vax===0?'#d4dae1':'#bcc4cd');line(fa[0],fa[fa.length-1],'rgba(255,255,255,.7)',.9);line(fb[0],fb[fb.length-1],'rgba(70,84,100,.55)',1.6);
   if(vax===0)poly([P(vx+1,vy,top),P(vx+1,vy+1,top),P(vx+1,vy+1,bot),P(vx+1,vy,bot)],'#b3bcc6');else poly([P(vx,vy+1,top),P(vx+1,vy+1,top),P(vx+1,vy+1,bot),P(vx,vy+1,bot)],'#cbd2da');
   drawRoadTile(vx,vy,i,j,top);
   if(vax===0){rail(P(vx,vy+.05),P(vx+1,vy+.05),top,4);rail(P(vx,vy+.95),P(vx+1,vy+.95),top,4)}else{rail(P(vx+.05,vy),P(vx+.05,vy+1),top,4);rail(P(vx+.95,vy),P(vx+.95,vy+1),top,4)}
   if(run.p%2===0){const lp=vax===0?P(vx+.5,vy+.95,top):P(vx+.95,vy+.5,top);line(lp,[lp[0],lp[1]-18],'#8a96a3',1.3);ctx.fillStyle='#eef1f4';ctx.fillRect(lp[0]-3,lp[1]-20,6,2.5);glows.push([lp[0],lp[1]-18,'#ffe2a0',9])}
   if(bClosed){for(let s=0;s<4;s++)poly(rect(vx+.12+s*.19,vy+.12,.1,.76,top+.5),s%2?'#ffffff':'#d9473a')}
   return{ax,run}}
-function drawPylons(i,j,ax,L){const ps=L>=9?[Math.round(L/3),Math.round(2*L/3)]:[Math.floor(L/2)],top=BH;
-  for(const m of ps){const at=(d,e,z)=>ax?PW(i+e,j+m+d,z):PW(i+m+d,j+e,z),apex=at(0,.5,top+64),half=L>=9?L/3:Math.max(m,L-m);
-    for(const e of[.08,.92])for(let d=-half+.4;d<=half-.4;d+=.55){if(Math.abs(d)<.3||m+d<0||m+d>L)continue;const a=at(d,e,top+1);line(apex,a,'rgba(244,247,250,.92)',.8)}
-    const l1=at(0,.08,top),l2=at(0,.92,top);line(l1,apex,'#dfe4ea',4);line(l2,apex,'#c9d0d8',4);line(at(0,.08,top+30),at(0,.92,top+30),'#d6dce3',3);
-    circ(apex[0],apex[1],2.4,'#ff5b4b');glows.push([apex[0],apex[1],'#ff5b4b',8])}}
+function bridgePy(L){const n=Math.max(1,Math.round(L/11));return Array.from({length:n},(_,k)=>Math.round(L*(k+1)/(n+1)))}
+/* v0.35 다리 모양: 3~6칸은 아치교, 7칸 이상은 사장교(H자 주탑 + 부채꼴 케이블) */
+function drawPylons(i,j,ax,L){const top=BH,at=(u,e,z)=>ax?PW(i+e,j+u,z):PW(i+u,j+e,z);
+  if(L<7){const H=Math.min(30,10+L*3.2),u0=.15,u1=L-.15,az=u=>top+3+H*Math.sin(Math.PI*(u-u0)/(u1-u0));
+    for(const e of[.07,.93]){const pts=[];for(let k=0;k<=24;k++){const u=u0+(u1-u0)*k/24;pts.push(at(u,e,az(u)))}
+      for(let k=1;k<pts.length-1;k+=2){const u=u0+(u1-u0)*k/24;line(at(u,e,top+4),pts[k],'rgba(236,240,244,.95)',.9)}
+      ctx.beginPath();pts.forEach((p,k)=>k?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.strokeStyle=e<.5?'#e8664a':'#c9513a';ctx.lineWidth=3.4;ctx.lineJoin='round';ctx.stroke()}
+    for(const f of[.3,.5,.7]){const u=u0+(u1-u0)*f;line(at(u,.07,az(u)),at(u,.93,az(u)),'#d85a40',2)}
+    return}
+  const ps=bridgePy(L),n=ps.length,reach=Math.max(3,Math.min(L/(2*n),9));
+  for(const m of ps){const pT=top+74;
+    {const pv=toV(ax?i+.5:i+m,ax?j+m:j+.5);const c0=P(pv[0],pv[1],0);ell(c0[0],c0[1]+1,16,7,'rgba(255,255,255,.4)');box(pv[0]-.42,pv[1]-.42,.84,.84,0,top-6,{l:'#cfd5dc',r:'#adb6c0',t:'#e1e5ea'},false)}
+    for(const e of[.04,.96]){const cA=e<.5?'rgba(250,252,253,.95)':'rgba(226,232,238,.95)';
+      for(let d=.6;d<=reach;d+=.6)for(const sg of[-1,1]){const u=m+sg*d;if(u<.2||u>L-.2)continue;const zA=pT-6-d/reach*26;line(at(m,e,zA),at(u,e,top+3),cA,.75)}}
+    for(const e of[.04,.96]){line(at(m,e,top-2),at(m,e,pT),e<.5?'#eef1f4':'#cdd4dc',5)}
+    line(at(m,.04,top+38),at(m,.96,top+38),'#dde2e7',3.2);line(at(m,.04,pT-2),at(m,.96,pT-2),'#e6eaee',3.4);
+    for(const e of[.04,.96]){const a=at(m,e,pT+1);circ(a[0],a[1],2.2,'#ff5b4b');glows.push([a[0],a[1],'#ff5b4b',8])}}}
 function hvAnchor(i,j){const k=ix(i,j),v=toV(i+.5,j+.5),off=road[k]?.32:0;return[v[0]-off,v[1]-off,water[k]?0:mount[k]*HZ]}
 function drawHV(o){const{i,j,k}=o,[ax,ay,z]=hvAnchor(i,j),pv=view==='power',h=HVS[HVC[k]],live=h&&h.p>0,wc=pv?(live?'#f2b705':'#b0554b'):'rgba(64,72,84,.7)',top=z+30;
   if(!water[k]){const b0=P(ax,ay,z),t0=P(ax,ay,top),lc=pv?'#c9a73a':'#9aa3ad';line([b0[0]-5,b0[1]],t0,lc,1.2);line([b0[0]+5,b0[1]],t0,lc,1.2);line([b0[0]-3.4,b0[1]-10],[b0[0]+3.4,b0[1]-10],lc,.9);line([b0[0]-3.4,b0[1]-10],[b0[0]+1.6,b0[1]-20],lc,.7);line([b0[0]+3.4,b0[1]-10],[b0[0]-1.6,b0[1]-20],lc,.7);line([t0[0]-9,t0[1]+5],[t0[0]+9,t0[1]+5],pv?'#b38a1c':'#7d8792',1.6)}
@@ -1989,7 +2001,7 @@ function drawBridges(bridges,ramps){
     for(let c=0;c<3;c++){const vc=vrect(sx-.24,sj-.85+c*.5,.48,.42);box(vc[0],vc[1],vc[2],vc[3],5,4,shade(['#e8735c','#f2b705','#4f9b6a'][c]),false)}const vb=vrect(sx-.22,sj+.55,.44,.34);box(vb[0],vb[1],vb[2],vb[3],5,9,shade('#ffffff'))}}
   /* 다리와 경사로: 뒤에서 앞으로 */
   const elev=bridges.map(b=>[b[0],b[1],b[2],b[3],null]).concat(ramps).sort((a,b)=>(a[0]+a[1])-(b[0]+b[1])),runs=[];
-  for(const e of elev){if(e[4])drawRamp(e[0],e[1],e[2],e[3],e[4]);else{const r=drawDeck(e[0],e[1],e[2],e[3]);if(r.run.p===0&&r.run.L>=4)runs.push([e[2],e[3],r.ax,r.run.L])}}
+  for(const e of elev){if(e[4])drawRamp(e[0],e[1],e[2],e[3],e[4]);else{const r=drawDeck(e[0],e[1],e[2],e[3]);if(r.run.p===0&&r.run.L>=3)runs.push([e[2],e[3],r.ax,r.run.L])}}
   for(const r of runs)drawPylons(r[0],r[1],r[2],r[3]);
 }
 
@@ -2570,7 +2582,7 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.34</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.35</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
     '</div>'+(slotCount()?'<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>다른 도시 불러오기 · 지우기</small></button></div>':''),true);
   if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
