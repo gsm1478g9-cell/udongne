@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.32</title>
+<title>우리 동네 짓기 v0.33</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -615,8 +615,8 @@ solar:{name:'태양광 발전소',cost:600,w:1,d:1,up:2,bt:2,icon:'sun',col:'#f2
   landfill:{name:'쓰레기 매립지',cost:1500,w:2,d:2,up:6,bt:6,icon:'trash',col:'#8c7a55',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'싸지만 가득 차요 · 냄새',desc:'쓰레기를 땅에 묻어요. 값이 싸고 전기가 필요 없지만, 가득 차면 더 묻을 수 없어요. 주변 4칸은 냄새가 나고, 5칸 안의 지하수를 오염시켜요.'},
   incin:{name:'쓰레기 소각장',cost:5000,w:2,d:2,up:25,bt:8,icon:'flame',col:'#9b5d3a',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'많이 태우고 전기도 · 연기',desc:'쓰레기를 태워서 없애고, 그 열로 전기(30)도 만들어요. 한 시간에 250까지 처리하지만 값이 비싸고 연기가 나요.'},
   recycle:{name:'재활용 센터',cost:4000,w:2,d:2,up:15,bt:6,icon:'recycle',col:'#3fa56b',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'깨끗하게 · 수입도 조금',desc:'쓰레기를 종류별로 나눠 다시 쓸 수 있게 만들어요. 연기·냄새가 없고 판 돈으로 수입도 생기지만, 한 시간에 120까지만 처리해요.'},
-  clinic:{name:'진료소',cost:1200,w:1,d:1,up:6,bt:3,icon:'cross',col:'#e25b6a',tags:[['건축','build'],['공공용 · 의료','']],short:'가까운 동네 병원',desc:'가까운 주민이 진료를 받아요. 아파트는 진료소·병원 범위 안에서만 생겨요.'},
-  hospital:{name:'종합병원',cost:5000,w:2,d:2,up:22,bt:8,icon:'cross',col:'#d43d51',tags:[['건축','build'],['공공용 · 의료','']],short:'넓은 범위 · 구급차',desc:'큰 병원이라 진료소보다 2배 넓은 범위의 주민을 치료해요. 구급차가 오가요.'},
+  clinic:{name:'진료소',cost:1200,w:1,d:1,up:6,bt:3,icon:'cross',col:'#e25b6a',tags:[['건축','build'],['공공용 · 의료','']],short:'환자 30명 · 작고 싸요',desc:'도로로 이어진 동네의 환자를 30명까지 진료해요. 환자는 인구에 따라 늘고, 공기나 수돗물이 나쁜 동네일수록 많아요. 진료를 받을 수 있는 집만 아파트가 돼요.'},
+  hospital:{name:'종합병원',cost:5000,w:2,d:2,up:22,bt:8,icon:'cross',col:'#d43d51',tags:[['건축','build'],['공공용 · 의료','']],short:'환자 150명 · 구급차',desc:'큰 병원이라 환자를 150명까지 받아요. 구급차가 도로를 따라 다녀서 도로로 이어진 동네 어디든 맡아요.'},
   fountain:{name:'분수 광장',cost:1500,w:2,d:2,up:3,bt:3,icon:'fountain',col:'#2fa3d6',land:1,tour:15,tags:[['토목','civil'],['명소','']],short:'관광 +15 · 주민 행복',desc:'물줄기가 춤추는 광장이에요. 관광객이 찾아와 돈을 쓰고, 주변 주민이 행복해져요.'},
   ferris:{name:'놀이공원',cost:4000,w:2,d:2,up:8,bt:5,icon:'ferris',col:'#e8735c',land:2,tour:40,tags:[['건축','build'],['명소','']],short:'관광 +40 · 대관람차',desc:'대관람차와 회전목마가 있는 놀이공원이에요. 관광객이 많이 찾아와요.'},
   stadium:{name:'축구 경기장',cost:7000,w:2,d:2,up:12,bt:7,icon:'stadium',col:'#3fa45c',land:3,tour:70,tags:[['건축','build'],['명소','']],short:'관광 +70 · 밤 경기 조명',desc:'시민과 관광객이 모여 응원하는 경기장이에요. 밤에는 조명이 환하게 켜져요.'},
@@ -657,7 +657,7 @@ const nwCost=o=>NWC*2*(o.w+o.d);
 const GDEM={R:[0,1,3,8],C:[0,1,3,6],I:[0,2,5,9]},LFCAP=30000,GCAP={landfill:200,incin:250,recycle:120};
 const HR=b=>N>40?Math.round(b*1.67):b;
 const EXT={battery:1500,pumped:4000,depot:1500,school:1200,fire:900,police:900,clinic:700,hospital:3000,landfill:1000,water:1500,sewage:1800,incin:3000,recycle:2400};
-const EXTW={battery:'저장량 50% 많이',pumped:'저장량 50% 많이',depot:'범위 30% 넓게',school:'범위 30% 넓게',fire:'범위 30% 넓게',police:'범위 30% 넓게',clinic:'범위 30% 넓게',hospital:'범위 30% 넓게',landfill:'묻는 양 50% 많게',water:'수돗물 50% 많이',sewage:'처리량 50% 많이',incin:'태우는 양 50% 많게',recycle:'처리량 50% 많이'};
+const EXTW={battery:'저장량 50% 많이',pumped:'저장량 50% 많이',depot:'범위 30% 넓게',school:'범위 30% 넓게',fire:'범위 30% 넓게',police:'범위 30% 넓게',clinic:'받는 환자 50% 많이',hospital:'받는 환자 50% 많이',landfill:'묻는 양 50% 많게',water:'수돗물 50% 많이',sewage:'처리량 50% 많이',incin:'태우는 양 50% 많게',recycle:'처리량 50% 많이'};
 const XM=o=>o.ext?1.5:1;
 let GON=false,HON=false,AON=false,LV=new Float32Array(1);
 /* v0.16: 시간대별 전기 수요 — 주택은 저녁에, 가게는 낮에, 공장은 낮 근무 시간에 전기를 많이 써요 */
@@ -941,8 +941,8 @@ const CAMPAIGN=[
   {title:'막히는 길',desc:'도시가 커지면 출퇴근길이 막혀요. [교통] 보기에서 빨간 길을 찾아 넓은 도로로 바꾸고, 버스 정류장을 지어 차를 줄여요.',
    checks:[['인구 800명',()=>[stat.pop,800]],['버스 정류장 1곳',()=>[facN('bus'),1]],['넓은 도로 6칸',()=>{let n=0;for(let k=0;k<N*N;k++)if(road[k]===2)n++;return[Math.min(6,n),6]}],['막힌 길 3칸 이하',()=>[(stat.jam||0)<=3?1:0,1,(stat.jam||0)+'칸']]],reward:4000,unlock:['landfill','incin','recycle','clinic','hospital'],
    hint:'넓은 도로는 원래 도로 위에 놓으면 넓혀져요(칸당 30). 차가 가장 많이 다니는 길(교통 보기의 노랑·빨강)부터 넓혀요. 버스 정류장 반경 6칸 주민은 차를 덜 타요.'},
-  {title:'쓰레기와 건강',desc:'하루 뒤부터 쓰레기와 병원이 필요해요. 매립지는 싸지만 가득 차면 끝나고 냄새가 나요. 소각장은 많이 태우고 전기도 만들지만 연기가 나요. 진료소·병원 범위 안이어야 아파트가 유지돼요.',
-   checks:[['쓰레기 소각장 1곳 완공',()=>[facN('incin'),1]],['쓰레기 못 치운 건물 0곳',()=>{const n=trashN();return[gFacN()>0&&n===0?1:0,1,gFacN()>0?n+'곳':'처리 시설 없음']}],['진료소·병원 범위 안 아파트 5채',()=>[cnt(b=>b.type==='R'&&b.stage>=3&&b.health),5]]],reward:4500,unlock:['rwall','quay','expand'],
+  {title:'쓰레기와 건강',desc:'하루 뒤부터 쓰레기와 병원이 필요해요. 매립지는 싸지만 가득 차면 끝나고 냄새가 나요. 소각장은 많이 태우고 전기도 만들지만 연기가 나요. 진료소·병원이 받을 수 있는 환자 수(진료소 30명·병원 150명)가 모자라면 아파트가 유지되지 않아요.',
+   checks:[['쓰레기 소각장 1곳 완공',()=>[facN('incin'),1]],['쓰레기 못 치운 건물 0곳',()=>{const n=trashN();return[gFacN()>0&&n===0?1:0,1,gFacN()>0?n+'곳':'처리 시설 없음']}],['진료받는 아파트 5채',()=>[cnt(b=>b.type==='R'&&b.stage>=3&&b.health),5]]],reward:4500,unlock:['rwall','quay','expand'],
    hint:'[물·환경]에 매립지·소각장·재활용 센터가 있어요. 우리나라 생활 쓰레기는 절반 넘게 재활용하고, 남은 것은 주로 태워서(소각) 처리해요. 땅에 묻는(매립) 건 10% 정도예요.'},
   {title:'언덕과 강',desc:'땅이 모자라면 [현황]에서 땅을 사서 언덕 쪽으로 넓혀요. 도로는 비탈을 따라 경사로로 오르고, 가파르면 터널로 뚫어요. [땅 고르기]로 깎고 쌓아 땅을 다듬고(깎은 흙은 쌓을 때 다시 써요), 비탈엔 옹벽을 세워 평지처럼 쓰고 큰비 때 산사태도 막아요. 강가는 호안·제방으로 홍수를 막아요.',
    checks:[['언덕 위 집 6채',()=>[cnt(b=>b.type==='R'&&b.stage>=1&&hAt(b.i,b.j)>=1),6]],['땅 고르기로 흙 10단 옮기기',()=>[Math.max(0,Math.min(10,(flags.soilMoved||0)-(flags.soil0||0))),10]],['호안·제방 6칸',()=>{let n=0;for(let k=0;k<N*N;k++)if(quay[k]||levee[k])n++;return[Math.min(6,n),6]}]],reward:5000,unlock:['battery'],
@@ -1169,8 +1169,8 @@ function recompute(){damRefresh();groundDirty=true;
   let recInc=0,gdT=0,gcT=0;for(const kd of['recycle','incin','landfill'])for(const o of facs)if(o.kind===kd&&o.gCap>0){const c=comps[o.comp];o.gUse=Math.min(o.gCap,Math.max(0,c.gd-c.g));c.g+=o.gCap;if(kd==='recycle')recInc+=o.gUse*.4}
   for(const c of comps){gdT+=c.gd;gcT+=Math.min(c.g,c.gd)}
   const safe0=mode!=='scenario'&&!idle;GON=safe0&&unlocked.has('landfill')&&((stat.pop||0)>=200||flags.gonL)&&hours>=(flags.gAt||0);HON=safe0&&unlocked.has('clinic')&&((stat.pop||0)>=200||flags.honL)&&hours>=(flags.gAt||0);if(GON)flags.gonL=1;if(HON)flags.honL=1;
-  const lfs=things.filter(o=>o.kind==='landfill'&&!(o.build>0)),hcs=facs.filter(o=>(o.kind==='clinic'||o.kind==='hospital')&&o.powered);
-  for(const b of blds){const c=b.comp>=0?comps[b.comp]:null;b.trash=GON&&b.stage>0&&!(c&&hash(b,6)<Math.min(1,c.g/Math.max(1,c.gd)));b.health=svcCov(hcs,b);b.smell=b.type!=='I'&&b.stage>0&&lfs.some(q=>Math.hypot(b.i+.5-(q.i+1),b.j+.5-(q.j+1))<=4)}
+  const lfs=things.filter(o=>o.kind==='landfill'&&!(o.build>0)),hcs=facs.filter(o=>(o.kind==='clinic'||o.kind==='hospital')&&o.powered);const HCc={},HDc={};for(const o of hcs)if(o.comp>=0)HCc[o.comp]=(HCc[o.comp]||0)+HCAP[o.kind]*XM(o);for(const b of blds)if(b.type==='R'&&b.stage>0&&b.comp>=0)HDc[b.comp]=(HDc[b.comp]||0)+sickOf(b);for(const o of things)if(o.kind==='clinic'||o.kind==='hospital'){o.hcap=o.comp>=0?HCc[o.comp]||0:0;o.hdem=o.comp>=0?HDc[o.comp]||0:0}HSUM.c=Object.values(HCc).reduce((a,v)=>a+v,0);HSUM.d=Object.values(HDc).reduce((a,v)=>a+v,0);
+  for(const b of blds){const c=b.comp>=0?comps[b.comp]:null;b.trash=GON&&b.stage>0&&!(c&&hash(b,6)<Math.min(1,c.g/Math.max(1,c.gd)));b.health=HON&&b.comp>=0&&(HCc[b.comp]||0)>0&&hash(b,7)<Math.min(1,HCc[b.comp]/Math.max(1,HDc[b.comp]||0));b.smell=b.type!=='I'&&b.stage>0&&lfs.some(q=>Math.hypot(b.i+.5-(q.i+1),b.j+.5-(q.j+1))<=4)}
   const schools=facs.filter(o=>o.kind==='school'&&o.powered);fireSt=facs.filter(o=>o.kind==='fire'&&o.powered);polSt=facs.filter(o=>o.kind==='police'&&o.powered);const safeOn=mode!=='scenario'&&!idle;const lms=facs.filter(o=>FAC[o.kind].land&&o.powered);
   for(const b of blds){b.school=schools.some(s=>Math.hypot(b.i-(s.i+.5),b.j-(s.j+.5))<=10.5*(s.ext?1.3:1));b.air=air[ix(b.i,b.j)];b.lm=lms.some(s=>Math.hypot(b.i-(s.i+s.w/2),b.j-(s.j+s.d/2))<=8);b.fireC=svcCov(fireSt,b);b.polC=svcCov(polSt,b);
     let m=0;const why=[];
@@ -1286,7 +1286,7 @@ function renderSns(){const el=$('sns');if(!el||el.hidden)return;snsNew=0;updSnsB
 function lfTick(){if(idle)return;for(const o of things)if(o.kind==='landfill'&&!(o.build>0)&&o.gUse>0){const cap=LFCAP*XM(o),was=(o.fv||0)/cap;o.fv=(o.fv||0)+o.gUse;const now=o.fv/cap;
     if(now>=1&&was<1){o.fv=cap;warnOnce('lffull','쓰레기 매립지가 가득 찼어요! 새 매립지를 짓거나, 증축하거나, 소각장·재활용 센터로 쓰레기를 줄여 보세요.',12);recompute()}else if(now>=.8&&was<.8)warnOnce('lf80','쓰레기 매립지가 80% 찼어요. 곧 가득 차요.',24)}
   if(GON&&stat.blds&&stat.blds.filter(b=>b.trash).length>=4)warnOnce('trash','쓰레기를 가져갈 곳이 모자라요! 쓰레기가 쌓인 동네에는 아파트·사무용 빌딩이 생기지 않아요. [물·환경]에서 매립지·소각장·재활용 센터를 지어 보세요.',36);
-  if(HON&&stat.blds&&stat.blds.filter(b=>b.type==='R'&&b.stage>=2&&!b.health).length>=4)warnOnce('health','진료소·병원 범위 밖 동네에는 아파트가 생기지 않아요. [공공]에서 진료소를 지어 보세요.',36)}
+  if(HON&&stat.blds&&stat.blds.filter(b=>b.type==='R'&&b.stage>=2&&!b.health).length>=4)warnOnce('health','병원이 받을 수 있는 환자보다 아픈 사람이 많아서 진료를 못 받는 집이 있어요. 진료를 못 받으면 아파트가 생기지 않아요. [공공]에서 진료소·병원을 더 지어 보세요.',36)}
 function updateSim(dh,sdt){
   hours+=dh;while(Math.floor(hours)>lastHour){lastHour++;hourTick();if(modalOpen&&!idle)break}
   for(const o of things){if(o.anim>0)o.anim=Math.max(0,o.anim-sdt*1.6);
@@ -2244,7 +2244,7 @@ function draw(dt){seasonNow=seasonIdx();
     if(tool==='fire')worldCircle(cx,cy,SR(),'rgba(217,71,58,.08)','rgba(217,71,58,.75)');
     if(tool==='police')worldCircle(cx,cy,SR(),'rgba(61,111,196,.08)','rgba(61,111,196,.8)');
     if(tool==='gwpump')worldCircle(cx,cy,5.5,'rgba(140,108,60,.07)','rgba(140,108,60,.7)');
-    if(tool==='clinic'||tool==='hospital')worldCircle(cx,cy,HR(tool==='clinic'?8:16),'rgba(226,91,106,.08)','rgba(226,91,106,.8)');
+    
     if(tool==='pumped'){const pw=pumpWater(gh[0],gh[1]);worldCircle(cx,cy,12.5,'rgba(62,127,184,.06)','rgba(62,127,184,.7)');const p=toScreen(PW(cx,cy,(hAt(gh[0],gh[1])||0)*HZ+30));labelQ(p[0],p[1]-14,hAt(gh[0],gh[1])<2?'언덕 위(2단 이상)에 지어요':!pw?'12칸 안에 강이 없어요':'높이 '+hAt(gh[0],gh[1])+'단 · 저장 '+250*Math.min(4,Math.max(2,hAt(gh[0],gh[1]))),hAt(gh[0],gh[1])>=2&&pw?'rgba(225,240,252,.97)':'rgba(251,228,222,.97)',hAt(gh[0],gh[1])>=2&&pw?'#1e4f7c':'#8a2a1d',14)}
     if(tool==='depot')worldCircle(cx,cy,HR(10),'rgba(217,138,43,.08)','rgba(217,138,43,.8)');
     if(tool==='landfill')worldCircle(cx,cy,4,'rgba(140,122,85,.08)','rgba(140,122,85,.75)');
@@ -2252,7 +2252,7 @@ function draw(dt){seasonNow=seasonIdx();
     if(f.land)worldCircle(cx,cy,8,'rgba(255,190,40,.08)','rgba(224,142,0,.75)')}
   if(drag&&tool==='I'){const a=drag.a,b=drag.b;plume((a[0]+b[0])/2+.5,(a[1]+b[1])/2+.5,30)}
   if(sel&&sel.kind==='fire'&&things.includes(sel))worldCircle(sel.i+1,sel.j+1,svcR(sel),'rgba(217,71,58,.07)','rgba(217,71,58,.7)');
-  if(sel&&(sel.kind==='clinic'||sel.kind==='hospital')&&things.includes(sel))worldCircle(sel.i+sel.w/2,sel.j+sel.d/2,svcR(sel),'rgba(226,91,106,.07)','rgba(226,91,106,.75)');
+  if(false)worldCircle(sel.i+sel.w/2,sel.j+sel.d/2,svcR(sel),'rgba(226,91,106,.07)','rgba(226,91,106,.75)');
   if(sel&&sel.kind==='depot'&&things.includes(sel))worldCircle(sel.i+1,sel.j+1,svcR(sel),'rgba(217,138,43,.07)','rgba(217,138,43,.8)');
   if(sel&&sel.kind==='landfill'&&things.includes(sel))worldCircle(sel.i+1,sel.j+1,4,'rgba(140,122,85,.08)','rgba(140,122,85,.75)');
   if(sel&&sel.kind==='police'&&things.includes(sel))worldCircle(sel.i+1,sel.j+1,svcR(sel),'rgba(61,111,196,.07)','rgba(61,111,196,.75)');
@@ -2406,7 +2406,7 @@ function renderInfo0(force){const o=sel,el=$('info');if(!o||(!o.tile&&!things.in
     const ck=(ok,l,why)=>checks.push([ok?'y':'n',l,ok?'':why]);
     ck(o.road,'도로 연결','근처(2칸 안)에 도로가 없어요');if(T==='I'&&o.road&&mode!=='scenario')ck(o.out,'바깥과 이어진 도로(수출)','지도 끝까지 이어진 도로가 있어야 공장 물건을 팔 수 있어요');ck(o.power,'전기',WHYT.power);ck(o.water,'수돗물',WHYT.water);if(o.water)ck(o.clean,'깨끗한 물',WHYT.dirty);
     ck(o.sewer,'하수 처리','가장 큰 건물이 되려면 필요해요');if(onSlope(o.i,o.j))ck(false,'평평한 땅',unlocked.has('rwall')?'비탈이라 2층까지만 지을 수 있고, 큰비가 오면 산사태가 날 수 있어요. [땅·철거] → 옹벽을 세우면 둘 다 해결돼요':'비탈이라 2층까지만 지을 수 있어요');if(T==='R')ck(o.school,'학교 범위','아파트가 되려면 필요해요');if(T!=='I'&&mode!=='scenario'){ck(o.polC,'경찰서 범위',(T==='R'?'아파트가':'사무용 빌딩이')+' 되려면 필요해요');ck(o.fireC,'소방서 범위',(T==='R'?'아파트가':'사무용 빌딩이')+' 되려면 필요해요')}
-    if(T==='R'&&HON)ck(o.health,'진료소·병원 범위','아파트가 되려면 필요해요');if(GON&&o.stage)ck(!o.trash,'쓰레기 수거',(T==='I'?'공장 쓰레기가 쌓였어요':(T==='R'?'아파트가':'사무용 빌딩이')+' 되려면 필요해요')+'. 매립지·소각장·재활용 센터가 모자라요');if(o.smell)checks.push(['w','쓰레기 냄새','쓰레기 매립지가 가까워요(만족도↓)']);
+    if(T==='R'&&HON)ck(o.health,'진료(병원이 받아 줌)','아파트가 되려면 필요해요. 병원 자리가 모자라면 일부 집은 진료를 못 받아요');if(GON&&o.stage)ck(!o.trash,'쓰레기 수거',(T==='I'?'공장 쓰레기가 쌓였어요':(T==='R'?'아파트가':'사무용 빌딩이')+' 되려면 필요해요')+'. 매립지·소각장·재활용 센터가 모자라요');if(o.smell)checks.push(['w','쓰레기 냄새','쓰레기 매립지가 가까워요(만족도↓)']);
     if(T!=='I'&&o.stage){const tr=o.traffic||0;checks.push([tr>1.5?'n':tr>.8?'w':'y','교통 '+(tr>1.5?'막힘':tr>.8?'조금 막힘':'원활'),tr>1.5?'길이 막혀서 더 크지 못해요. 넓은 도로나 버스 정류장이 필요해요':''])}
     if(T!=='I'&&o.stage){const lv=LV[ix(o.i,o.j)]||0;checks.push([lv<30?'n':lv<55?'w':'y','땅값 '+Math.round(lv)+' ('+lvName(lv)+')',lv<30?'공원·학교를 가까이, 공장·쓰레기 시설은 멀리 두면 올라요. 땅값이 높을수록 세금이 많이 걷혀요':''])}
     const a=o.air||0,lim=T==='R'?10:30;checks.push([a>lim?'n':a>5?'w':'y','공기 '+airName(a)+' ('+a.toFixed(0)+')',a>lim?'공장 연기가 날아오는 곳이에요':'']);
@@ -2431,7 +2431,7 @@ function renderInfo0(force){const o=sel,el=$('info');if(!o||(!o.tile&&!things.in
       if(o.kind==='incin')checks.push(['y','한 시간에 '+Math.round(GCAP.incin*XM(o))+'까지 태워요 (지금 '+Math.round(o.gUse||0)+')',''],['w','연기가 '+windTo()+'쪽으로 퍼져요','']);
       if(o.kind==='recycle')checks.push([o.powered?'y':'n','전기',''],['y','한 시간에 '+Math.round(GCAP.recycle*XM(o))+'까지 처리 (지금 '+Math.round(o.gUse||0)+')',''],['y','재활용 수입 +'+Math.round((o.gUse||0)*.4)+' / 시간','']);
       if(o.kind==='depot')checks.push([o.powered?'y':'n','전기',''],['y','범위: 반경 '+Math.round(svcR(o))+'칸 (지도에 주황 원)',''],['y','범위 안 도로·다리를 매시간 고쳐요','']);
-      if(o.kind==='clinic'||o.kind==='hospital')checks.push([o.powered?'y':'n','전기',''],['y','범위: 반경 '+Math.round(svcR(o))+'칸 (지도에 분홍 원)','']);
+      if(o.kind==='clinic'||o.kind==='hospital')checks.push([o.powered?'y':'n','전기',''],['y','이 병원: 환자 '+Math.round(HCAP[o.kind]*XM(o))+'명까지',''],[o.hdem>o.hcap?'n':'y','도로로 이어진 동네: 환자 '+Math.round(o.hdem||0)+'명 / 받을 수 있는 '+Math.round(o.hcap||0)+'명',o.hdem>o.hcap?'모자라요! 진료소·병원을 더 짓거나 [증축]해요. 공기·물을 깨끗하게 하면 환자도 줄어요':'']);
       if(o.kind==='school')checks.push([o.powered?'y':'n','전기',''],['y','범위: 반경 '+(o.ext?13:10)+'칸 (지도에 보라색 원)','']);
       if(o.kind==='coal')checks.push(['w','연기가 '+windTo()+'쪽으로 퍼져요','']);
       if(o.kind==='solar')checks.push([darkness(hod())<1?'y':'n','지금 '+(darkness(hod())<1?'발전 중':'밤이라 쉬는 중'),'']);
@@ -2490,7 +2490,7 @@ function renderDrawer(force){const el=$('drawer');if(el.hidden||!stat.facs)retur
   setH('taxv',tax+'%');setH('taxTip',(t=>t+' 같은 세율이어도 땅값이 높은 동네일수록 세금이 더 걷혀요.')(tax<=5?'세금이 낮아서 주민과 가게가 많이 몰려와요. 대신 수입이 적어요.':tax<=11?'알맞은 세금이에요. 올리면 수입이 늘고, 내리면 도시가 빨리 커져요.':tax<=15?'수입이 늘지만 주민이 조금 불만이에요.':'너무 높아요! 주민과 가게가 떠날 수 있어요.'));
   setH('drMoney',[['세금 수입','+'+fmt(s.taxInc)],['관광 수입','+'+fmt(s.tour)],...(s.recInc?[['재활용 수입','+'+fmt(s.recInc)]]:[]),...(s.expInc?[['공장 물건 수출','+'+fmt(s.expInc)]]:[]),...(s.pExp?[['전기 팔기 (1당 0.8)','+'+fmt(s.pExp*.8)]]:[]),['운영비: 시설','−'+fmt(s.upF)],['운영비: 도로·송전선','−'+fmt(s.upR)],...(s.pImp?[['전기 사 오기 (1당 2.5, 팔 때의 3배)','−'+fmt(s.pImp*2.5)]]:[]),...(s.upTop?[['운영비가 가장 큰 시설',FAC[s.upTop[0]].name+' −'+fmt(s.upTop[1])]]:[]),['빚 갚기',pay?'−'+fmt(pay):'없음'],['시간당 합계',(net>=0?'+':'−')+fmt(Math.abs(net))],['남은 빚',fmt(debt)]].map(([a,b])=>'<dt>'+a+'</dt><dd>'+b+'</dd>').join(''));
   $('loan').disabled=debt+11000>22000;$('repay').disabled=debt<=0||money<=0;
-  setH('drStats',[...(mode==='scenario'?[]:[['계절',SEFX[seasonIdx()][0]+' · '+SEFX[seasonIdx()][5]]]),['난이도',DIF().n],['도시 등급',RANKS[flags.rank||0][0]],['막힌 길',(stat.jam||0)+'칸'],['일자리',fmt(s.jobs)],['전기 (사용 / 공급)',fmt(s.pd)+' / '+fmt(s.pc)],['지금 전기 사용',pdTag()],...(s.batCap?[['저장된 전기(ESS·양수)',fmt(s.batSt)+' / '+fmt(s.batCap)]]:[]),['재생 에너지',s.pc?Math.round(s.pr/s.pc*100)+'%':'-'],['수돗물 (사용 / 공급)',fmt(s.wd)+' / '+fmt(s.wc)],['하수 처리',fmt(Math.min(s.sd,s.sc))+' / '+fmt(s.sd)],...(unlocked.has('landfill')?[['쓰레기 (처리 / 발생)',fmt(s.gc||0)+' / '+fmt(s.gd||0)]]:[]),...(AON?[['점검·보수가 필요한 시설',things.filter(o=>ageK(o.kind)&&(o.wear||0)>=40).length+'곳'],['낡은 도로',(()=>{let n=0;for(let k=0;k<N*N;k++)if(road[k]&&rw[k]>=60)n++;return n})()+'칸']]:[]),['정수장 강물 수질',wP.length?wP.map(o=>qName(o.intakeQ)).join(', '):'정수장 없음'],['강 하류 수질',qName(mouthQ())],['주택가 공기',airName(s.airR)],['평균 땅값',Math.round(s.lvAvg||0)+' ('+lvName(s.lvAvg||0)+')']].map(([a,b])=>'<dt>'+a+'</dt><dd>'+b+'</dd>').join(''));
+  setH('drStats',[...(mode==='scenario'?[]:[['계절',SEFX[seasonIdx()][0]+' · '+SEFX[seasonIdx()][5]]]),['난이도',DIF().n],['도시 등급',RANKS[flags.rank||0][0]],['막힌 길',(stat.jam||0)+'칸'],['일자리',fmt(s.jobs)],['전기 (사용 / 공급)',fmt(s.pd)+' / '+fmt(s.pc)],['지금 전기 사용',pdTag()],...(s.batCap?[['저장된 전기(ESS·양수)',fmt(s.batSt)+' / '+fmt(s.batCap)]]:[]),...(HON?[['환자 / 병원이 받는 수',fmt(HSUM.d||0)+' / '+fmt(HSUM.c||0)+'명'+((HSUM.d||0)>(HSUM.c||0)?' (모자라요)':'')]]:[]),['재생 에너지',s.pc?Math.round(s.pr/s.pc*100)+'%':'-'],['수돗물 (사용 / 공급)',fmt(s.wd)+' / '+fmt(s.wc)],['하수 처리',fmt(Math.min(s.sd,s.sc))+' / '+fmt(s.sd)],...(unlocked.has('landfill')?[['쓰레기 (처리 / 발생)',fmt(s.gc||0)+' / '+fmt(s.gd||0)]]:[]),...(AON?[['점검·보수가 필요한 시설',things.filter(o=>ageK(o.kind)&&(o.wear||0)>=40).length+'곳'],['낡은 도로',(()=>{let n=0;for(let k=0;k<N*N;k++)if(road[k]&&rw[k]>=60)n++;return n})()+'칸']]:[]),['정수장 강물 수질',wP.length?wP.map(o=>qName(o.intakeQ)).join(', '):'정수장 없음'],['강 하류 수질',qName(mouthQ())],['주택가 공기',airName(s.airR)],['평균 땅값',Math.round(s.lvAvg||0)+' ('+lvName(s.lvAvg||0)+')']].map(([a,b])=>'<dt>'+a+'</dt><dd>'+b+'</dd>').join(''));
   setH('drDem',[['R','주거','#4caf63'],['C','상업','#3d8fd9'],['I','공업','#e59a2f']].map(([k,n,c])=>'<div><i style="background:'+c+';height:'+Math.max(3,Math.abs(demand[k])*40).toFixed(0)+'px;opacity:'+(demand[k]<0?.35:1)+'"></i>'+n+'</div>').join(''));
   setH('unlock',landBtns());
   $('drDis').hidden=mode==='scenario'||!!(flags.ch&&!flags.ch.done);const db=$('disBtn'),dtx=flags.disasters?'켜짐':'꺼짐';if(db.textContent!==dtx){db.textContent=dtx;db.classList.toggle('on',!!flags.disasters)}
@@ -2570,7 +2570,7 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.32</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.33</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
     '</div>'+(slotCount()?'<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>다른 도시 불러오기 · 지우기</small></button></div>':''),true);
   if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
@@ -2677,7 +2677,7 @@ function zoneHint(){const T=previewTilesF().filter(p=>p.ok&&inb(p.i,p.j));if(!T.
     if(unlocked.has('school'))sv('학교',sc);
     if(safe&&unlocked.has('police'))sv('경찰',T.filter(p=>svcCov(polSt,p)).length);
     if(safe&&unlocked.has('fire'))sv('소방',T.filter(p=>svcCov(fireSt,p)).length);
-    if(HON){const hc=things.filter(o=>(o.kind==='clinic'||o.kind==='hospital')&&o.powered&&!(o.build>0));sv('병원',T.filter(p=>svcCov(hc,p)).length)}
+    
     if(sl)tok.push('비탈 '+sl+'칸(2층까지)');
     if(am>=22){lvl=2;msg='연기가 심해서 집이 크지 못해요'}else if(sm){lvl=2;msg='매립지 냄새가 나요'}else if(am>=10){lvl=1;msg='공기가 나빠서 아파트는 안 돼요'}else if(nz){lvl=1;msg='공사 소음이 들려요'}else if(lv<30){lvl=1;msg='땅값이 낮은 자리예요'}
     else msg=all&&!sl&&unlocked.has('school')?'완벽한 자리예요! ✨':'살기 좋은 자리예요!'}
@@ -2694,6 +2694,7 @@ function facHint(g){const f=FAC[tool],B=stat.blds||[],R=B.filter(b=>b.type==='R'
   if(tool==='school'){const ins=R.filter(b=>Math.hypot(b.i-(g[0]+.5),b.j-(g[1]+.5))<=10.5),nw=ins.filter(b=>!b.school).length;return{lvl:nw?0:1,head:nw?'학교 범위에 새로 드는 집 '+nw+'채':'새로 범위에 드는 집이 없어요',tok:['범위 안 집 '+ins.length+'채']}}
   if(tool==='park'){const nb=R.filter(b=>Math.hypot(b.i+.5-cx,b.j+.5-cy)<=3).length;return{lvl:nb?0:1,head:nb?'가까운 집 '+nb+'채의 공기·땅값이 좋아져요':'가까이에 집이 없어요',tok:[]}}
   if(tool==='landfill'||tool==='incin'){const nb=B.filter(b=>b.stage>0&&b.type!=='I'&&Math.hypot(b.i+.5-cx,b.j+.5-cy)<=5).length;return{lvl:nb>=3?2:nb?1:0,head:nb?'가까운 집·가게 '+nb+'채가 싫어해요(땅값 ↓)':'주변에 집이 없어서 좋아요',tok:[]}}
+  if(tool==='clinic'||tool==='hospital'){const k=Math.round(HSUM.d||0),c=Math.round(HSUM.c||0),add=HCAP[tool];return{lvl:k>c?0:1,head:k>c?'환자 '+k+'명 / 받을 수 있는 '+c+'명 → 지으면 '+(c+add)+'명':'지금도 자리가 남아요(환자 '+k+' / '+c+'명)',tok:['도로로 이어진 곳이면 어디든 돼요']}}
   const s={kind:tool,i:g[0],j:g[1],w:f.w,d:f.d},r=svcR(s),hc=tool==='clinic'||tool==='hospital',L=hc?R:B.filter(b=>b.stage>0&&b.type!=='I'),key=tool==='police'?'polC':tool==='fire'?'fireC':'health';
   const ins=L.filter(b=>Math.hypot(b.i+.5-cx,b.j+.5-cy)<=r),nw=ins.filter(b=>!b[key]).length;
   return{lvl:nw?0:1,head:nw?(tool==='police'?'새로 지켜 주는 건물 ':tool==='fire'?'새로 불을 막아 주는 건물 ':'새로 병원 범위에 드는 집 ')+nw+'채':'새로 범위에 드는 건물이 없어요',tok:['범위 안 '+ins.length+'채']}}
@@ -2709,7 +2710,7 @@ function placeHint(){if(idle||tut||modalOpen)return;let h=null,at=null;
 
 /* 3) 하루 결산 — 아침 6시마다 어제와 비교(인구·만족도·예산·점수)와 가장 급한 일 */
 let recT=0,recLast=-1e9,recOn=true;try{recOn=localStorage.getItem('udongne-recap')!=='0'}catch(e){}
-const NEEDT={road:'도로가 끊긴 건물',power:'전기가 안 들어오는 건물',water:'수돗물이 없는 건물',dirty:'수돗물이 더러운 건물',sewer:'하수도가 없는 건물',school:'학교 범위 밖 집',air:'공기가 나빠 못 크는 건물',police:'경찰서 범위 밖 건물',firecov:'소방서 범위 밖 건물',export:'물건을 팔 길이 없는 공장',health:'병원 범위 밖 집',trash:'쓰레기를 못 치운 건물',traffic:'길이 막혀 못 크는 건물',flood:'물에 잠긴 건물'};
+const NEEDT={road:'도로가 끊긴 건물',power:'전기가 안 들어오는 건물',water:'수돗물이 없는 건물',dirty:'수돗물이 더러운 건물',sewer:'하수도가 없는 건물',school:'학교 범위 밖 집',air:'공기가 나빠 못 크는 건물',police:'경찰서 범위 밖 건물',firecov:'소방서 범위 밖 건물',export:'물건을 팔 길이 없는 공장',health:'진료를 못 받는 집',trash:'쓰레기를 못 치운 건물',traffic:'길이 막혀 못 크는 건물',flood:'물에 잠긴 건물'};
 const recNow=()=>({d:Math.floor(lastHour/24)+1,p:Math.round(stat.pop||0),s:Math.round((stat.sat||0)*100),m:Math.round(money),c:Math.round(flags.ch?chScore():stat.score||0)});
 function dayTick(){if(idle||demo||mode==='scenario')return;if(!flags.hist){flags.hist=[recNow()];flags.dUp=0;flags.dRep=0;return}if(lastHour%24!==6)return;
   const H=flags.hist,pv=H[H.length-1],cur=recNow();cur.u=Math.round(flags.dUp||0);cur.r=Math.round(flags.dRep||0);flags.dUp=0;flags.dRep=0;H.push(cur);if(H.length>60)H.splice(0,H.length-60);
@@ -2923,7 +2924,7 @@ const DTOP={
    st('학교·경찰서 같은 큰 공사는 시끄러워요. 주황 원 안의 집들이 불편해해요.');setTool('nwall');await sleep(4500);
    st('공사장을 누르면 [방음벽 치기] 버튼이 나와요. 누르면 가림막을 쳐요. 소음이 줄고 공사 사고도 줄어요.');setTool('look');{const sc=dfind('school');if(sc){sel=sc;renderInfo(true);await sleep(2600);putFence(sc);renderInfo(true);await sleep(1800);sel=null;renderInfo(true)}}
    st('시간을 빨리 돌려요. 공사가 끝나면 범위 안 집들이 아파트로 자라요!');await camTo(10,6,32,20);await runHours(34);await sleep(3000);
-   st('끝! 아파트가 되려면 학교·경찰서·소방서·병원 범위와 쓰레기 처리까지 필요해요. 미션 4에서 해 보세요.');await sleep(5000)}},
+   st('끝! 아파트가 되려면 학교·경찰서·소방서 범위, 병원 진료, 쓰레기 처리까지 필요해요. 미션 4에서 해 보세요.');await sleep(5000)}},
  traffic:{n:'막히는 길',m:5,min:2,ic:'car',col:'#e3803a',d:'[교통] 보기로 막힌 길을 찾아 넓은 도로·버스 정류장으로 풀어요.',steps:6,
   setup(){dTown({safe:true,waste:true,big:true,p2:true,h:60})},
   async run(st){st('[교통] 보기예요. 초록은 원활, 노랑은 조금 막힘, 빨강은 막힌 길이에요.');setV('traffic');await camTo(6,6,34,32);await sleep(4500);
@@ -2937,7 +2938,7 @@ const DTOP={
   async run(st){st('인구가 200명을 넘으면 쓰레기를 치울 곳이 필요해요. 쓰레기가 쌓인 동네는 아파트가 생기지 않아요.');await camTo(8,6,32,22);await sleep(5000);
    st('쓰레기 매립지는 싸지만 냄새가 나고 언젠가 가득 차요. 집에서 먼 곳에 지어요.');await camTo(10,12,34,32);await dPlace('landfill',29,29);
    st('소각장은 태워서 양을 줄이고, 재활용 센터는 다시 써서 돈도 조금 벌어요.');await dPlace('incin',24,29);await dPlace('recycle',20,29);
-   st('진료소·병원 범위 밖 집도 아파트가 안 돼요. 진료소(좁은 범위)나 종합병원(넓은 범위)을 지어요.');await camTo(8,6,32,22);await dPlace('clinic',24,13);await dPlace('clinic',13,13);
+   st('아픈 주민이 병원이 받을 수 있는 수보다 많으면 진료를 못 받는 집이 생겨요. 진료소(환자 30명)나 종합병원(환자 150명)을 지어요.');await camTo(8,6,32,22);await dPlace('clinic',24,13);await dPlace('clinic',13,13);
    st('시간을 빨리 돌려요.');await runHours(28);await sleep(2000);
    st('우리나라 생활폐기물은 재활용 59% · 소각 25% · 매립 11%(2023년)예요. 줄이고, 다시 쓰고, 남은 것만 태우거나 묻어요.');await sleep(6000);
    st('끝! 미션 6 「쓰레기와 건강」에서 해 보세요.');await sleep(3500)}},
@@ -3113,6 +3114,10 @@ function juicePlace(tl,list,spent,bp){if(!list.length||demo&&!DF)return;const a=
 let drag0=null;
 {const _c=commit;commit=function(){const tl=tool;let pre=[];try{if(drag)pre=previewTiles().filter(p=>p.ok)}catch(e){}drag0=drag&&drag.a?drag.a.slice():null;const m0=money,b0=(flags.bp||[]).length,t0=things.length;
   _c.apply(this,arguments);const bp=(flags.bp||[]).length>b0;if(money<m0||bp||things.length!==t0)juicePlace(tl,pre,m0-money,bp);drag0=null}}
+
+/* v0.33: 병원은 범위 대신 수용량 */
+const HCAP={clinic:30,hospital:150},HSUM={c:0,d:0};
+function sickOf(b){const a=air[ix(b.i,b.j)]||0;return POP.R[b.stage]*(.03+(a>10?.02:0)+(b.water&&!b.clean?.02:0))}
 /* ================= 시작 ================= */
 updateViews();
 idle=true;newCity({mode:'free',showcase:true});hours=9;lastHour=9;
