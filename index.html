@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.30</title>
+<title>우리 동네 짓기 v0.31</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -634,7 +634,7 @@ TM.nwall={name:'방음벽',icon:'wall',col:'#4f86a8',cost:50,how:'공사 중인 
 const CATS=[{id:'look',name:'살펴보기',icon:'hand',col:'#5c6878',items:['look']},{id:'road',name:'도로',icon:'road',col:'#626b7d',items:['road','avenue','bus','depot']},
   {id:'R',name:'주거',icon:'house',col:ZCOL.R,items:['R']},{id:'C',name:'상업',icon:'shop',col:ZCOL.C,items:['C']},{id:'I',name:'공업',icon:'factory',col:ZCOL.I,items:['I']},
   {id:'pow',name:'전기',icon:'bolt',col:'#e9a400',items:['coal','wind','solar','dam','battery','pumped','hv','sub']},{id:'wat',name:'물·환경',icon:'drop',col:'#2fa3d6',items:['water','gwpump','sewage','outlet','landfill','incin','recycle']},
-  {id:'pub',name:'공공',icon:'school',col:'#8d6fd1',items:['school','clinic','hospital','park','fire','police','levee','quay','nwall']},{id:'lm',name:'명소',icon:'star',col:'#e3923e',items:['fountain','ferris','stadium','tower']},{id:'bull',name:'땅·철거',icon:'trash',col:'#d9573f',items:['bull','grade','rwall']}];
+  {id:'pub',name:'공공',icon:'school',col:'#8d6fd1',items:['school','clinic','hospital','park','fire','police','levee','quay']},{id:'lm',name:'명소',icon:'star',col:'#e3923e',items:['fountain','ferris','stadium','tower']},{id:'bull',name:'땅·철거',icon:'trash',col:'#d9573f',items:['bull','grade','rwall']}];
 const TNAME={};for(const k in TM)TNAME[k]=TM[k].name;
 const ALL=Object.keys(TNAME);
 const DIFFS=[{n:'쉬움',d:'돈이 넉넉하고 재난이 드물어요',money:1.5,inc:1.15,dis:2,cap:1.4,up:.9,fire:.6},{n:'보통',d:'처음엔 보통으로!',money:1,inc:1,dis:1,cap:1,up:1,fire:1},{n:'어려움',d:'돈이 빠듯하고 재난이 잦아요',money:.7,inc:.95,dis:.6,cap:.8,up:1.05,fire:1.3}];
@@ -685,17 +685,14 @@ const repCost=o=>Math.round(FAC[o.kind].cost*WRATE[wStage(o.wear||0)]/10)*10;
 const wearCol=w=>w<40?'#4caf63':w<60?'#e9b300':w<85?'#e98a2b':'#d9473a';
 const wearTint=w=>w<40?'rgba(76,175,99,.45)':w<70?'rgba(233,179,0,.45)':w<100?'rgba(233,138,43,.5)':'rgba(217,71,58,.55)';
 const rwLv=k=>!road[k]?0:rw[k]>=85?2:rw[k]>=60?1:0;
-function ageOnNow(){const on=mode!=='scenario'&&!idle&&((stat.pop||0)>=200||flags.aonL)&&(mode==='free'||(mode==='campaign'&&missionIdx>=8));if(on)flags.aonL=1;return on}
+function ageOnNow(){const on=mode!=='scenario'&&!idle&&((stat.pop||0)>=200||flags.aonL)&&(mode==='free'||(mode==='campaign'&&missionIdx>=8))&&!flags.ch;if(on)flags.aonL=1;return on}
 function ageTick(){AON=ageOnNow();if(!AON)return;
-  for(const o of things){if(!ageK(o.kind)||o.build>0)continue;const w0=o.wear||0,r=o.kind==='coal'||o.kind==='incin'?.23:.18;o.wear=Math.min(100,w0+r);const s0=wStage(w0),s1=wStage(o.wear);
-    if(s1>s0){const n=FAC[o.kind].name;if(s1===1)warnOnce('w1','정기 점검 시기예요: '+n+'. 시설을 눌러 [점검·보수하기]를 하면 싸게 고칠 수 있어요.',24);
-      else if(s1===2){const m=n+'에 금이 갔어요! 지금 고치면 '+fmt(repCost(o))+', 멈춘 뒤에 고치면 '+fmt(Math.round(FAC[o.kind].cost*.06)*10)+'이 들어요.';toast(m);pushLog(m)}
-      else{const m=n+jo(n,'이','가')+' 너무 낡아서 멈췄어요! 시설을 눌러 보수해야 다시 작동해요.';toast(m);pushLog(m);snd('warn');recompute()}}}
+  for(const o of things){if(!ageK(o.kind)||o.build>0)continue;const w0=o.wear||0,r=o.kind==='coal'||o.kind==='incin'?.23:.18;o.wear=Math.min(w0>=100?100:99,w0+r)}
   const deps=(stat.facs||[]).filter(o=>o.kind==='depot'&&o.powered);
   for(let k=0;k<N*N;k++){if(!road[k])continue;const r=Math.min(2,tload[k]/capOf0(k));rw[k]=Math.min(100,rw[k]+(.08+r*.3)*(water[k]?1.5:1))}
   if(deps.length)for(const q of deps){const R=svcR(q),cx=q.i+q.w/2,cy=q.j+q.d/2;for(let i=Math.max(0,Math.floor(cx-R));i<=Math.min(N-1,Math.ceil(cx+R));i++)for(let j=Math.max(0,Math.floor(cy-R));j<=Math.min(N-1,Math.ceil(cy+R));j++){const k=ix(i,j);if(road[k]&&rw[k]>0&&Math.hypot(i+.5-cx,j+.5-cy)<=R)rw[k]=Math.max(0,rw[k]-3)}}
   let bad=0;for(let k=0;k<N*N;k++)if(road[k]&&rw[k]>=60)bad++;if(bad>=6)warnOnce('roadw','낡은 도로가 '+bad+'칸 있어요. 움푹 파인 길은 차가 덜 다녀서 막히기 쉬워요. [도로] → 도로 정비소를 지으면 범위 안 도로를 자동으로 고쳐요.',48)}
-function repairFac(o){const c=repCost(o);if(!c)return;if(money<c){toast('예산이 모자라요. 보수비 '+fmt(c));snd('warn');return}const st=wStage(o.wear||0);snapshot();money-=c;flags.dRep=(flags.dRep||0)+c;o.wear=0;flags.nRep=(flags.nRep||0)+1;dust(o.i+o.w/2,o.j+o.d/2,10);floater(o.i+o.w/2,o.j+o.d/2,'−'+fmt(c),'#c63d2f');snd('build');
+function repairFac(o){const c=repCost(o);if(!c)return;if(money<c){toast('예산이 모자라요. 보수비 '+fmt(c));snd('warn');return}const st=wStage(o.wear||0);snapshot();money-=c;flags.dRep=(flags.dRep||0)+c;o.wear=0;o.defer=0;o.brkAt=0;flags.nRep=(flags.nRep||0)+1;dust(o.i+o.w/2,o.j+o.d/2,10);floater(o.i+o.w/2,o.j+o.d/2,'−'+fmt(c),'#c63d2f');snd('build');
   toast(FAC[o.kind].name+' '+(st===1?'점검을 마쳤어요':st===2?'균열을 보수했어요':'수리를 마쳤어요. 다시 작동해요')+' (−'+fmt(c)+')'+(st===1?'. 미리 점검하면 가장 싸요!':''));afterEdit()}
 function roadRepairList(i0,j0){const out=[];for(let i=i0-3;i<=i0+3;i++)for(let j=j0-3;j<=j0+3;j++){if(!inb(i,j))continue;const k=ix(i,j);if(road[k]&&rw[k]>=20)out.push(k)}return out}
 const roadRepCost=L=>Math.round(L.reduce((a,k)=>a+rw[k]*.6,0)/10)*10;
@@ -717,7 +714,7 @@ function gradePile(out){const F=new Map(),fin=new Map();for(const p of out){if(!
     if(ok){sup.add(k);ch=true}}}
   let n=0;for(const[k,p]of F)if(!sup.has(k)){p.ok=false;p.why='pile';n++}return n}
 function soilFee(out){const r=soilCalc(out);if(!r.fee)return;for(let n=out.length-1;n>=0;n--)if(out[n].ok){out[n].cost+=r.fee;break}}
-function longTip(k,h){const wOk=unlocked.has('nwall');openModal('<div class="eyebrow">'+ico('clock',16)+'큰 공사</div><h2>큰 공사가 시작됐어요!</h2><p class="sub">처음 짓는 기본 시설은 빨리 지어 드렸지만, 이제부터 큰 시설은 실제처럼 오래 걸려요. <b>'+esc(FAC[k].name)+'</b>'+jo(FAC[k].name,'은','는')+' 완공까지 <b>'+tTxt(h)+'</b> 걸려요. 착공 → 기초 → 골조 → 마감 순서로 지어져요.</p><p class="sub">💡 필요해지기 <b>전에</b> 미리 지어 두세요.'+(wOk?'<br>🔇 공사하는 동안 소음 때문에 주변 주민이 불편해해요. [공공] → <b>방음벽</b>을 고르고 공사장을 누르면 둘레에 가림막을 쳐요. 가림막은 소음도 막고, 사람이 공사장에 함부로 들어가지 못하게 해서 안전사고도 줄여요.':'')+'</p><div class="opts"><button type="button" class="opt primary" id="ltOk"><span>알겠어요</span></button></div>');$('ltOk').onclick=()=>{closeModal();snd('tick')}}
+function longTip(k,h){const wOk=unlocked.has('nwall');openModal('<div class="eyebrow">'+ico('clock',16)+'큰 공사</div><h2>큰 공사가 시작됐어요!</h2><p class="sub">처음 짓는 기본 시설은 빨리 지어 드렸지만, 이제부터 큰 시설은 실제처럼 오래 걸려요. <b>'+esc(FAC[k].name)+'</b>'+jo(FAC[k].name,'은','는')+' 완공까지 <b>'+tTxt(h)+'</b> 걸려요. 착공 → 기초 → 골조 → 마감 순서로 지어져요.</p><p class="sub">💡 필요해지기 <b>전에</b> 미리 지어 두세요.'+(wOk?'<br>🔇 공사하는 동안 소음 때문에 주변 주민이 불편해해요. 공사장을 눌러 <b>[방음벽 치기]</b>를 누르면 둘레에 가림막을 쳐요. 가림막은 소음도 막고, 사람이 공사장에 함부로 들어가지 못하게 해서 안전사고도 줄여요.':'')+'</p><div class="opts"><button type="button" class="opt primary" id="ltOk"><span>알겠어요</span></button></div>');$('ltOk').onclick=()=>{closeModal();snd('tick')}}
 const ro=w=>{const c=w.charCodeAt(w.length-1)-0xAC00;return c<0||c>11171||c%28===0||c%28===8?'로':'으로'};
 const ACHKEY='udongne-ach-v1';let achGot={};try{achGot=JSON.parse(localStorage.getItem(ACHKEY)||'{}')||{}}catch(e){}
 
@@ -936,7 +933,7 @@ const CAMPAIGN=[
   {title:'하수와 바람',desc:'집과 공장의 더러운 물을 하수 처리장에서 깨끗하게 만들어 강에 내보내요. 하수 방류구는 싸지만 처리하지 않고 그대로 버려서 강이 더러워져요. 공장 연기가 주택가로 오면 공장을 철거하고 바람 아래쪽으로 옮겨요.',
    checks:[['하수 처리장에서 처리하는 건물 10곳',()=>[cnt(b=>b.stage>0&&b.treated),10]],['강 하류 수질 보통 이상',()=>[mouthQ()<25?1:0,1,qName(mouthQ())]],['주택가 공기 보통 이상',()=>{const a=stat.airR||0;return[a<10?1:0,1,airName(a)]}]],reward:3000,unlock:['school','fire','police','nwall','levee'],
    hint:'하수 처리장은 마을보다 하류(아래쪽)에 지어요. 전기가 모자라면 송전선으로 발전소와 변전소를 이어 보세요.'},
-  {title:'안전한 동네',desc:'학교·소방서·경찰서 범위 안에서 하수 처리와 맑은 공기를 갖추면 아파트가 생겨요. 큰 시설은 공사가 오래 걸리고 시끄러워요. 학교·소방서·경찰서 공사가 시작되면(설계도는 [시공하기]를 눌러야 시작돼요) 완공 전에 [공공] → 방음벽을 고르고 공사장을 눌러 둘레를 막아요. 가림막은 소음을 줄이고 공사장 안전사고도 막아요.',
+  {title:'안전한 동네',desc:'학교·소방서·경찰서 범위 안에서 하수 처리와 맑은 공기를 갖추면 아파트가 생겨요. 큰 시설은 공사가 오래 걸리고 시끄러워요. 학교·소방서·경찰서 공사가 시작되면(설계도는 [시공하기]를 눌러야 시작돼요) 완공 전에 공사장을 눌러 [방음벽 치기]로 둘레를 막아요. 가림막은 소음을 줄이고 공사장 안전사고도 막아요.',
    checks:[['아파트 3채',()=>[cnt(b=>b.type==='R'&&b.stage>=3),3]],['공사장에 방음벽 치기',()=>[Math.min(1,flags.nFence||0),1]]],reward:3500,unlock:['avenue','bus','wind','solar'],
    hint:'[살펴보기]로 집을 눌러 보면 빠진 조건이 빨간색으로 보여요. 큰 시설은 필요해지기 전에 미리 지어요.'},
   {title:'막히는 길',desc:'도시가 커지면 출퇴근길이 막혀요. [교통] 보기에서 빨간 길을 찾아 넓은 도로로 바꾸고, 버스 정류장을 지어 차를 줄여요.',
@@ -951,9 +948,9 @@ const CAMPAIGN=[
   {title:'전기 길',desc:'집은 저녁에, 가게·공장은 낮에 전기를 많이 써요. 풍력·태양광으로 깨끗한 전기를 늘리고, 낮에 남는 전기는 ESS(에너지 저장 장치)에 모았다가 저녁·밤에 써요. 송전선을 지도 끝까지 이으면 전기를 사고팔 수도 있어요.',
    checks:[['재생 에너지 40% 이상',()=>{const p=Math.round((stat.pr||0)/Math.max(1,stat.pc)*100);return[p,40,p+'% / 40%']}],['ESS 1곳 완공',()=>[facN('battery'),1]],['정전 없이 하루(24시간)',()=>[Math.min(24,flags.streak||0),24]]],reward:5500,unlock:['depot'],
    hint:'[현황]에서 지금 시간대의 전기 사용을 볼 수 있어요. 태양광은 밤에 쉬니 ESS나 풍력과 함께 써요.'},
-  {title:'오래 쓰는 도시',desc:'세월이 흘러 시설과 도로가 낡았어요. [유지] 보기로 낡은 곳을 찾고, 시설을 눌러 [점검·보수하기]를 해요. 미루면 금이 가고 결국 멈춰요(미룰수록 고치는 돈이 3배, 6배로 늘어요). 도로 정비소를 지으면 범위 안 도로를 저절로 고쳐요.',
+  {title:'오래 쓰는 도시',desc:'세월이 흘러 시설과 도로가 낡아요. 가끔 [정기 안전 점검] 결과가 와요. 지금 고칠지 미룰지 정해요. 미룰수록 고치는 돈이 늘고(10% → 30% → 60%), 두 번 미루면 시설이 멈춰요. [유지] 보기로 낡은 곳을 찾아 미리 고칠 수도 있어요. 도로 정비소를 지으면 범위 안 도로를 저절로 고쳐요.',
    checks:[['점검·보수 3번',()=>[Math.min(3,flags.nRep||0),3]],['도로 정비소 1곳 완공',()=>[facN('depot'),1]],['멈춘 시설 0곳',()=>{const n=things.filter(o=>o.broken).length;return[n?0:1,1,n+'곳']}]],reward:5500,unlock:['dam','pumped'],
-   hint:'노란색(점검 필요)일 때 고치면 가장 싸요. 빨간 X는 낡아서 멈춘 시설이에요.'},
+   hint:'안전 점검 결과가 오면 미루지 말고 고치는 게 가장 싸요. 시설을 눌러 [점검·보수하기]로 미리 고쳐도 돼요.'},
   {title:'큰 공사',desc:'댐으로 많은 전기를 만들거나, 양수 발전소로 전기를 저장해요. 댐을 지으면 위쪽 낮은 땅이 호수 자리가 되고, 완공 뒤 강물과 빗물로 천천히 차올라요. 비가 적은 계절엔 수위와 전기가 줄어요. 잠길 길이 있으면 먼저 언덕 위로 새 길(이설 도로)을 내야 해요. 양수 발전소는 언덕 위 저수지에 물을 퍼 올려 전기를 저장해요.',
    checks:[['댐 또는 양수 발전소 완공',()=>[facN('dam')+facN('pumped')>0?1:0,1]],['인구 1,500명',()=>[stat.pop,1500]]],reward:8000,unlock:[],
    hint:'강은 서쪽 산골짜기에서 내려와요. [현황]에서 서쪽 땅을 사고, 골짜기 입구(산줄기가 강을 좁히는 곳)의 강을 눌러 댐을 지어요. 골짜기 바닥의 큰길이 잠기면 먼저 산허리(호수보다 높은 곳)로 지도 끝까지 새 길(이설 도로)을 내요. 양수 발전소는 2단 이상 언덕 위, 12칸 안에 강이 있어야 해요.'}
@@ -1068,7 +1065,7 @@ function commit(){
     const o=addThing({kind:tl,i:i0,j:j0,w:FAC[tl].w,d:FAC[tl].d,seed:i0*7+j0,build:BT,btT:BT});money-=FAC[tl].cost;dust(i0+o.w/2,j0+o.d/2,10);if(!demo&&W>=760)sel=o;snd('place');floater(i0+o.w/2,j0+o.d/2,'−'+fmt(FAC[tl].cost),'#c63d2f');
     if(!demo)toast(FAC[tl].name+' 공사를 시작했어요. 완공까지 '+tTxt(BT)+'.');afterEdit();if(longB&&!flags.longTip&&!tut&&!demo&&!idle){flags.longTip=1;longTip(tl,BT)}return}
   if(tl==='nwall'){const[i0,j0]=drag.b,o=inb(i0,j0)?tobj[ix(i0,j0)]:null;if(!o||!NOISY.has(o.kind)||!(o.build>0)){toast('공사 중인 큰 시설(발전소·정수장·학교 등)을 눌러 주세요. 공사장 둘레에 방음벽을 쳐요.'+((flags.bp||[]).length?' 설계도는 [시공하기]를 눌러야 공사가 시작돼요.':''));snd('warn');return}
-    if(o.fence){toast('이미 방음벽을 쳤어요.');return}const c=nwCost(o);if(money<c){toast('예산이 모자라요. 필요한 돈 '+fmt(c)+' (지금 '+fmt(Math.max(0,money))+'). 시간을 돌려 세금을 모으거나 [현황]에서 대출을 받을 수 있어요.');snd('warn');return}
+    putFence(o);return;const c=nwCost(o);if(money<c){toast('예산이 모자라요. 필요한 돈 '+fmt(c)+' (지금 '+fmt(Math.max(0,money))+'). 시간을 돌려 세금을 모으거나 [현황]에서 대출을 받을 수 있어요.');snd('warn');return}
     snapshot();o.fence=1;flags.nFence=(flags.nFence||0)+1;money-=c;floater(o.i+o.w/2,o.j+o.d/2,'−'+fmt(c),'#c63d2f');snd('place');toast(FAC[o.kind].name+' 공사장 둘레에 방음벽을 쳤어요. 이제 공사 소리가 주변 집까지 거의 가지 않아요.');afterEdit();return}
   const all=previewTiles(),list=all.filter(p=>p.ok);
   if((tl==='road'||tl==='avenue')&&all.some(p=>p.why==='steep')){toast('너무 가팔라서 이 길은 놓을 수 없어요. 도로는 한 칸에 한 단까지만 오를 수 있어요. [터널]로 바꾸거나 [땅 고르기]로 깎아 보세요.');snd('warn');return}
@@ -1115,7 +1112,7 @@ function recompute(){damRefresh();groundDirty=true;
   for(let k=0;k<N*N;k++)if(comp[k]>=0){const i=Math.floor(k/N),j=k%N;if(i===0||j===0||i===N-1||j===N-1)comps[comp[k]].edge=true}
   nearRoad=new Uint8Array(N*N);for(let k=0;k<N*N;k++)if(sroad(k)){const i=Math.floor(k/N),j=k%N;for(let a=-2;a<=2;a++)for(let b=-2;b<=2;b++)if(inb(i+a,j+b))nearRoad[ix(i+a,j+b)]=1}
   const fd=floodDepth(),inF=k=>floodD[k]>0&&floodD[k]<=fd;
-  const facs=[],blds=[];for(const o of things){o.flooded=false;if(fd&&o.kind!=='dam')for(let a=o.i;a<o.i+o.w;a++)for(let b=o.j;b<o.j+o.d;b++)if(inF(ix(a,b)))o.flooded=true;if(o.kind==='bld')blds.push(o);else if(FAC[o.kind]){o.broken=AON&&ageK(o.kind)&&(o.wear||0)>=100;o.dry=!(o.build>0)&&facDry(o);if(o.dry&&!o.wasDry&&!idle&&!demo)warnOnce('dry','호수 수위가 내려가서 '+FAC[o.kind].name+'에 물이 닿지 않아요. 물이 다시 차거나 강가로 옮기면 다시 작동해요.',48);o.wasDry=o.dry;if(o.build>0||o.flooded||o.broken||o.dry){o.comp=-1;o.powered=false;o.dis=0;o.chg=0;o.gUse=0;o.gCap=0}else facs.push(o)}}
+  const facs=[],blds=[];for(const o of things){o.flooded=false;if(fd&&o.kind!=='dam')for(let a=o.i;a<o.i+o.w;a++)for(let b=o.j;b<o.j+o.d;b++)if(inF(ix(a,b)))o.flooded=true;if(o.kind==='bld')blds.push(o);else if(FAC[o.kind]){o.broken=AON&&ageK(o.kind)&&(o.wear||0)>=100;o.dry=!(o.build>0)&&facDry(o);if(o.dry&&!o.wasDry&&!idle&&!demo)warnOnce('dry','호수 수위가 내려가서 '+FAC[o.kind].name+'에 물이 닿지 않아요. 물이 다시 차거나 강가로 옮기면 다시 작동해요.',48);o.wasDry=o.dry;o.unpaid=!!flags.broke&&SVCSTOP.has(o.kind)&&!(o.build>0);if(o.build>0||o.flooded||o.broken||o.dry||o.unpaid){o.comp=-1;o.powered=false;o.dis=0;o.chg=0;o.gUse=0;o.gCap=0}else facs.push(o)}}
   const csz={};for(let k=0;k<N*N;k++){const c=comp[k];if(c>=0)csz[c]=(csz[c]||0)+1}
   for(const o of facs){o.comp=-1;let bs=0;for(let i=o.i-1;i<=o.i+o.w;i++)for(let j=o.j-1;j<=o.j+o.d;j++){if(!inb(i,j))continue;if(i>=o.i&&i<o.i+o.w&&j>=o.j&&j<o.j+o.d)continue;const c=tun[ix(i,j)]?-1:comp[ix(i,j)];if(c>=0&&csz[c]>bs){bs=csz[c];o.comp=c;o.acc=ix(i,j)}}}
   for(const b of blds){b.comp=-1;b.acc=-1;let bd=9;for(let i=b.i-2;i<=b.i+2;i++)for(let j=b.j-2;j<=b.j+2;j++){if(!inb(i,j))continue;const c=tun[ix(i,j)]?-1:comp[ix(i,j)];if(c>=0){const d=Math.max(Math.abs(i-b.i),Math.abs(j-b.j));if(d<bd){bd=d;b.comp=c;b.acc=ix(i,j)}}}}
@@ -1236,8 +1233,8 @@ function hourTick(){
   flags.streak=stat.pc>=stat.pd&&stat.pd>0?(flags.streak||0)+1:0;
   advise();
   if(mode!=='scenario'&&!idle&&!demo&&!modalOpen&&hours>=flags.nextEvent){const ev=EVENTS.find(e=>e.when());if(ev){flags.nextEvent=hours+22+Math.random()*12;showEvent(ev)}else flags.nextEvent=hours+5}
-  evalGoal();questTick();rankCheck();achCheck();updUndo();chTick();dayTick();
-  if((stat.nz||0)>=3&&mode!=='scenario')warnOnce('noise','공사 소음 때문에 주민 '+stat.nz+'가구가 불편해해요.'+(unlocked.has('nwall')?' [공공] → 방음벽을 고르고 공사장을 눌러 보세요.':''),48);
+  inspTick();brokeTick();evalGoal();questTick();rankCheck();achCheck();updUndo();chTick();dayTick();
+  if((stat.nz||0)>=3&&mode!=='scenario')warnOnce('noise','공사 소음 때문에 주민 '+stat.nz+'가구가 불편해해요.'+(unlocked.has('nwall')?' 공사장을 눌러 [방음벽 치기]를 해 보세요.':''),48);
   if(mode!=='scenario'&&stat.blds&&stat.blds.some(b=>b.type==='I'&&b.why&&b.why.includes('export')))warnOnce('export','공장이 만든 물건을 팔 길이 없어요. 지도 끝(바깥)까지 이어진 도로와 연결해 주세요.',36);
   if((stat.jam||0)>=5&&unlocked.has('avenue'))warnOnce('jam','길이 막혀요! [교통] 보기에서 빨간 길을 찾아 넓은 도로로 바꾸거나 버스 정류장을 지어 보세요.',30);
   if(Math.floor(hours)%3===0)save();
@@ -1317,7 +1314,7 @@ const slideRisk=o=>o.kind==='bld'&&o.stage>0&&onSlope(o.i,o.j);
 function slideTick(){if(idle||demo||mode==='scenario'||!unlocked.has('rwall'))return 0;let n=0;for(const o of things.filter(slideRisk)){if(n>=4)break;if(Math.random()<.2){o.stage--;o.anim=1;dust(o.i+.5,o.j+.5,12,'#a07a4e');n++}}if(n){flags.nSlide=(flags.nSlide||0)+n;flags.slideAt=hours;snd('rumble');noUndo()}return n}
 function accTick(){if(idle||demo||tut||mode==='scenario'||flags.ch&&!flags.ch.done)return;if(mode==='campaign'&&!unlocked.has('nwall'))return;
   for(const o of things){if(!(o.build>0)||o.halt>0||!FAC[o.kind]||!NOISY.has(o.kind))continue;if(Math.random()<(o.fence?.002:.012)){o.halt=12;const fine=Math.round(FAC[o.kind].cost*.1/10)*10;money-=fine;flags.nAcc=(flags.nAcc||0)+1;flags.accAt=hours;noUndo();
-    const m=FAC[o.kind].name+' 공사장에서 안전사고가 났어요! 다친 사람을 돌보고 원인을 조사하느라 공사가 12시간 멈춰요(수습비 −'+fmt(fine)+').'+(o.fence?'':' [공공] → 방음벽(가림막)을 치면 사고가 크게 줄어요.');toast(m);pushLog(m);snd('warn');if(sel===o)renderInfo(true)}}}
+    const m=FAC[o.kind].name+' 공사장에서 안전사고가 났어요! 다친 사람을 돌보고 원인을 조사하느라 공사가 12시간 멈춰요(수습비 −'+fmt(fine)+').'+(o.fence?'':' 공사장을 눌러 [방음벽 치기](가림막)를 하면 사고가 크게 줄어요.');toast(m);pushLog(m);snd('warn');if(sel===o)renderInfo(true)}}}
 function damApply(){const p=flags.lakePlan;if(!p||!p.length)return false;const n=Math.round(Math.max(0,Math.min(1,flags.damLv||0))*p.length);let ch=false;
   for(let q=0;q<p.length;q++){const[k,nd,m0,no]=p[q],want=q<n;if(want&&!water[k]){water[k]=1;mount[k]=0;MAPD.nodeOf[k]=nd;ch=true}else if(!want&&water[k]){water[k]=0;mount[k]=m0;MAPD.nodeOf[k]=no;ch=true}}
   if(ch){flags.lake=p.slice(0,n).map(x=>[x[0],x[1]]);remt();if(flags.floodAt>=0)floodPlan()}return ch}
@@ -1581,7 +1578,7 @@ const EVENTS=[
    title:'계절이 바뀌었어요',text:'여름이 되어 바람이 남동풍으로 바뀌어요. 이제 공장 연기는 북서쪽으로 퍼져요. 우리나라는 겨울에 북서풍, 여름에 남동풍이 자주 불어요.',
    opts:[['알겠어요','',()=>{flags.seasonDone=true;windIdx=3;$('wind').value=3;recompute();pushLog('바람이 남동풍으로 바뀌었어요.')}]]}
 ];
-function showEvent(ev){snd('warn');openModal('<div class="eyebrow">'+ico('info',16)+'도시 소식</div><h2>'+esc(ev.title)+'</h2><p class="sub">'+esc(ev.text)+'</p><div class="opts">'+ev.opts.map((o,k)=>'<button type="button" class="opt'+(k===0?' primary':'')+'" data-k="'+k+'"><span>'+esc(o[0])+'</span>'+(o[1]?'<small>'+esc(o[1])+'</small>':'')+'</button>').join('')+'</div>');
+function showEvent(ev){snd('warn');openModal('<div class="eyebrow">'+ico(ev.ic||'info',16)+(ev.eb||'도시 소식')+'</div><h2>'+esc(ev.title)+'</h2><p class="sub">'+esc(ev.text)+'</p><div class="opts">'+ev.opts.map((o,k)=>'<button type="button" class="opt'+(k===0?' primary':'')+'" data-k="'+k+'"><span>'+esc(o[0])+'</span>'+(o[1]?'<small>'+esc(o[1])+'</small>':'')+'</button>').join('')+'</div>');
   $('mcard').querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click',()=>{closeModal();ev.opts[+b.dataset.k][2]();renderMission(true)}))}
 
 /* ================= 목표 ================= */
@@ -2415,7 +2412,7 @@ function renderInfo0(force){const o=sel,el=$('info');if(!o||(!o.tile&&!things.in
     if(o.lm&&o.stage)checks.push(['y','명소 근처라 주민이 더 행복해요',''])
     if(o.fire){tags.push(['불남','lock']);desc='불이 났어요! 불난 곳을 누르면 소방 헬기가 출동해요(−300).'}if(o.flooded){tags.push(['물에 잠김','lock']);desc='홍수로 물에 잠겼어요. 물이 빠지면 조금 망가진 채로 돌아와요.'}if(o.ruin>0){name='불탄 자리';desc='잔해를 치우는 중이에요(약 '+o.ruin+'시간). 다 치우면 다시 건물이 생겨요.'}}
   else if(FAC[o.kind]){const f=FAC[o.kind];name=f.name;icon=f.icon;col=f.col;tags=f.tags.slice();desc=f.desc;
-    if(o.build>0){tags.push(['공사 중','lock']);checks.push(['w',(o.stageName||'기초 공사')+' '+Math.round((o.prog||0)*100)+'%','']);if(NOISY.has(o.kind)){if(o.fence)checks.push(['y','방음벽 설치 — 공사 소음을 막고 있어요','']);else if(stat.blds){const cx=o.i+o.w/2,cy=o.j+o.d/2,nn=stat.blds.filter(b=>b.noise&&Math.hypot(b.i+.5-cx,b.j+.5-cy)<=NZR+o.w/2).length;checks.push([nn?'n':'y',nn?'공사 소음: 주변 '+nn+'가구가 시끄러워해요':'공사 소음: 불편한 집 없음',nn?'[공공] → 방음벽('+fmt(nwCost(o))+')으로 공사장 둘레를 막아 보세요':''])}}if(o.halt>0)checks.push(['n','공사 중지(사고 수습) '+Math.ceil(o.halt)+'시간','공사장 안전 점검이 끝나면 다시 지어요. 가림막(방음벽)을 치면 사고가 크게 줄어요']);desc='완공까지 '+tTxt(o.build)+' 남았어요. 공사가 끝나야 작동해요. 착공 → 기초 → 골조 → 마감 순서로 지어져요.'}
+    if(o.build>0){tags.push(['공사 중','lock']);checks.push(['w',(o.stageName||'기초 공사')+' '+Math.round((o.prog||0)*100)+'%','']);if(NOISY.has(o.kind)){if(o.fence)checks.push(['y','방음벽 설치 — 공사 소음을 막고 있어요','']);else if(stat.blds){const cx=o.i+o.w/2,cy=o.j+o.d/2,nn=stat.blds.filter(b=>b.noise&&Math.hypot(b.i+.5-cx,b.j+.5-cy)<=NZR+o.w/2).length;checks.push([nn?'n':'y',nn?'공사 소음: 주변 '+nn+'가구가 시끄러워해요':'공사 소음: 불편한 집 없음',nn?'아래 [방음벽 치기]로 공사장 둘레를 막아 보세요':''])}}if(o.halt>0)checks.push(['n','공사 중지(사고 수습) '+Math.ceil(o.halt)+'시간','공사장 안전 점검이 끝나면 다시 지어요. 가림막(방음벽)을 치면 사고가 크게 줄어요']);desc='완공까지 '+tTxt(o.build)+' 남았어요. 공사가 끝나야 작동해요. 착공 → 기초 → 골조 → 마감 순서로 지어져요.'}
     else{if(o.dry)checks.push(['n','물이 닿지 않아요','호수 수위가 내려가서 물에서 떨어졌어요. 물이 다시 차거나 강가로 옮기면 작동해요']);const PL=o.kind==='coal'||o.kind==='dam'||o.kind==='incin'||o.kind==='wind'||o.kind==='solar';
       if((o.kind==='solar'||o.kind==='wind')&&mode!=='scenario'){const se=seasonIdx(),f=o.kind==='solar'?SEFX[se][1]:SEFX[se][2];checks.push([f<1?'w':'y','계절('+SEFX[se][0]+'): 발전량 '+(f===1?'보통':(f>1?'+':'−')+Math.round(Math.abs(f-1)*100)+'%'),o.kind==='solar'?'해가 높고 낮이 긴 봄·여름에 잘, 겨울에는 덜 만들어요':'겨울에는 북서 계절풍이 세서 잘, 여름에는 바람이 약해 덜 만들어요'])}
       if(PL)checks.push(o.hvc>=0?['y','배전선 '+Math.round(o.lv||0)+' + 송전선 '+Math.round((o.out||0)-(o.lv||0)),'']:o.comp>=0?[o.capped?'w':'y','도로 밑 전선(배전)으로 보냄 '+Math.round(o.sent||0)+' / '+Math.round(o.out||0),o.capped?'배전선으로는 '+LVCAP+'까지만 보내요. 송전선과 변전소로 이으면 다 쓸 수 있어요':'']:['n','연결 안 됨','도로나 송전선에 붙여야 전기를 보낼 수 있어요']);
@@ -2455,16 +2452,17 @@ function renderInfo0(force){const o=sel,el=$('info');if(!o||(!o.tile&&!things.in
     else if(levee[k]){name='제방';icon='levee';col='#7a9a58';tags=[['토목','civil'],['수자원 시설 · 홍수 막기','']];desc='강물이 넘쳐도 이 둑이 막아 줘요. 둑 사이에 빈틈이 있으면 물이 그 사이로 들어와요.'}
     else if(road[k]){if(isFlood(k))checks.push(['n','홍수로 통행 금지','물이 빠지면 다시 열려요. 제방·호안으로 막을 수 있어요']);checks.push([tload[k]>capOf(k)?'n':tload[k]>capOf(k)*.5?'w':'y','교통량 '+fmt(tload[k])+' / '+fmt(capOf(k))+(tload[k]>capOf(k)?' (막힘)':''),tload[k]>capOf(k)?'넓은 도로로 바꾸면 차가 2.5배 넘게 다닐 수 있어요':'']);name=road[k]===2?'넓은 도로':'도로';icon='road';col='#626b7d';tags=[['토목','civil'],['교통 시설','']];desc='도로를 따라 전기와 수돗물도 함께 연결돼요.';{const on=comp[k]>=0&&comps[comp[k]].p>0;checks.push([on?'y':'n','전기가 흐르는 도로(배전선·수도관이 도로 밑에 있어요)',on?'':'발전소와 연결되지 않았어요'])}}
     else{name=locked(o.i,o.j)?'잠긴 땅':'빈 땅';icon=locked(o.i,o.j)?'lock':'target';if(locked(o.i,o.j))tags=[['잠긴 땅','lock']];const a=air[k];checks.push([a>10?'n':'y','공기 '+airName(a)+' ('+a.toFixed(0)+')','']);desc=locked(o.i,o.j)?(unlocked.has('expand')?'[현황]에서 땅을 사면 쓸 수 있어요.':'미션을 더 깨면 땅을 살 수 있어요.'):'구역을 정하거나 시설을 지을 수 있어요.'}}
+  if(o.unpaid)checks.push(['n','예산이 바닥나서 운영을 멈췄어요','예산이 0보다 많아지면 다시 열어요. [현황]에서 대출을 받을 수도 있어요']);
   if(o.kind&&!o.tile&&FAC[o.kind]&&FAC[o.kind].up)checks.push(['y','운영비: 시간당 '+fmtU(upOf(o.kind,o))+(o.ext?' (증축해서 1.5배)':''),'직원 월급·전기·약품처럼 매일 드는 돈이에요. 낡은 곳을 고치는 보수비는 따로 들어요']);
-  let ra='',rc=0;if(o.kind&&ageK(o.kind)&&!(o.build>0)&&AON){const w=o.wear||0,st=wStage(w);checks.push([['y','w','n','n'][st],'상태: '+WSN[st]+' (노후도 '+Math.round(w)+'%)',st===0?'':st===1?'지금 점검하면 가장 싸요':st===2?'더 미루면 멈춰요. 멈춘 뒤 고치면 2배 비싸요':'낡아서 멈췄어요. 보수해야 다시 작동해요']);if(st>0){ra='fac';rc=repCost(o)}}
+  let ra='',rc=0;if(o.kind&&NOISY.has(o.kind)&&o.build>0&&!o.fence&&unlocked.has('nwall')&&mode!=='scenario'){ra='fence';rc=nwCost(o)}if(o.kind&&ageK(o.kind)&&!(o.build>0)&&AON){const w=o.wear||0,st=wStage(w);checks.push([['y','w','n','n'][st],'상태: '+WSN[st]+' (노후도 '+Math.round(w)+'%)',st===0?'':st===1?'지금 점검하면 가장 싸요(짓는 값의 10%)':st===2?'지금 고치면 30%. 안전 점검을 두 번 미루면 멈춰요':'점검을 미뤄서 멈췄어요. 보수해야 다시 작동해요(60%)']);if(st>0){ra='fac';rc=repCost(o)}}
   if(o.tile&&road[ix(o.i,o.j)]&&AON){const k=ix(o.i,o.j),w=rw[k],lv=rwLv(k);checks.push([lv===2?'n':lv===1||w>=40?'w':'y','포장 상태: 노후도 '+Math.round(w)+'%'+(lv===2?' (많이 파임 · 차 절반)':lv===1?' (파임 · 차 75%)':''),lv?'도로 정비소 범위 안이면 자동으로 고쳐요':'']);const L=roadRepairList(o.i,o.j);if(L.length){ra='road';rc=roadRepCost(L)}}
   const xa=o.kind&&EXT[o.kind]&&!(o.build>0)&&unlocked.has('clinic')&&mode!=='scenario'&&!demo?(o.ext?'done':money>=EXT[o.kind]?'ok':'poor'):'';
   if(o.tile){const k=ix(o.i,o.j);if(!water[k]&&!road[k]&&LV.length===N*N)checks.push(['y','땅값 '+Math.round(LV[k])+' ('+lvName(LV[k])+')','']);if(ret[k])checks.push(['y','옹벽: 비탈이어도 평지처럼 지을 수 있어요(아파트도)','']);if(quay[k])checks.push(['y','호안: 돌로 쌓은 강둑이라 홍수에 잠기지 않아요','']);}
   const key=name+desc+JSON.stringify(checks)+JSON.stringify(tags)+xa+ra+rc+(money>=rc);if(!force&&key===renderInfo.k)return;renderInfo.k=key;
   el.hidden=false;
   el.innerHTML='<div class="ih"><div class="ci" style="background:'+col+'">'+ico(icon,20)+'</div><div><div class="nm">'+esc(name)+'</div><div class="tags">'+tags.map(([s,c])=>'<span class="tag '+c+'"'+(c==='civil'?' title="토목: 도로·다리·댐·발전소·상하수도처럼 모두가 함께 쓰는 사회 기반 시설"':c==='build'?' title="건축: 집·가게·공장·학교·병원처럼 사람이 머물며 쓰는 건물"':'')+'>'+esc(s)+'</span>').join('')+'</div></div><button class="x" type="button" aria-label="닫기">'+ico('x',16)+'</button></div>'+
-    (checks.length?'<ul class="checks">'+checks.map(([s,l,w])=>'<li class="'+s+'"><span class="m">'+(s==='y'?'✓':s==='n'?'✕':'!')+'</span><span>'+esc(l)+(w?'<span class="why">'+esc(w)+'</span>':'')+'</span></li>').join('')+'</ul>':'')+'<p id="infoDesc">'+esc(desc)+'</p>'+(ra?'<button type="button" class="xbtn rep" id="repBtn"'+(money>=rc?'':' disabled')+'>'+(ra==='road'?'주변 도로 다시 포장 · '+fmt(rc):'점검·보수하기 · '+fmt(rc))+'</button>':'')+(xa?'<button type="button" class="xbtn" id="extBtn"'+(xa==='ok'?'':' disabled')+'>'+(xa==='done'?'✓ 증축했어요 — '+EXTW[o.kind]:'증축하기 · '+fmt(EXT[o.kind])+' — '+EXTW[o.kind])+'</button>':'');
-  el.querySelector('.x').onclick=()=>{sel=null;renderInfo(true)};const xb=$('extBtn');if(xb&&xa==='ok')xb.onclick=()=>{doExt(o);renderInfo(true)};const rb=$('repBtn');if(rb&&money>=rc)rb.onclick=()=>{if(ra==='road')repairRoads(o.i,o.j);else repairFac(o);renderInfo(true)}}
+    (checks.length?'<ul class="checks">'+checks.map(([s,l,w])=>'<li class="'+s+'"><span class="m">'+(s==='y'?'✓':s==='n'?'✕':'!')+'</span><span>'+esc(l)+(w?'<span class="why">'+esc(w)+'</span>':'')+'</span></li>').join('')+'</ul>':'')+'<p id="infoDesc">'+esc(desc)+'</p>'+(ra?'<button type="button" class="xbtn rep" id="repBtn"'+(money>=rc?'':' disabled')+'>'+(ra==='fence'?'방음벽 치기 · '+fmt(rc):ra==='road'?'주변 도로 다시 포장 · '+fmt(rc):'점검·보수하기 · '+fmt(rc))+'</button>':'')+(xa?'<button type="button" class="xbtn" id="extBtn"'+(xa==='ok'?'':' disabled')+'>'+(xa==='done'?'✓ 증축했어요 — '+EXTW[o.kind]:'증축하기 · '+fmt(EXT[o.kind])+' — '+EXTW[o.kind])+'</button>':'');
+  el.querySelector('.x').onclick=()=>{sel=null;renderInfo(true)};const xb=$('extBtn');if(xb&&xa==='ok')xb.onclick=()=>{doExt(o);renderInfo(true)};const rb=$('repBtn');if(rb&&money>=rc)rb.onclick=()=>{if(ra==='fence')putFence(o);else if(ra==='road')repairRoads(o.i,o.j);else repairFac(o);renderInfo(true)}}
 let drBuilt=false;const drCache={};
 function setH(id,h){if(drCache[id]!==h){drCache[id]=h;const e=$(id);if(e)e.innerHTML=h}}
 function buildDrawer(){const el=$('drawer');drBuilt=true;for(const k in drCache)delete drCache[k];
@@ -2569,7 +2567,7 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.30</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.31</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
     '</div>'+(slotCount()?'<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>다른 도시 불러오기 · 지우기</small></button></div>':''),true);
   if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
@@ -2920,7 +2918,7 @@ const DTOP={
    st('학교를 고르면 보라색 원으로 범위가 보이고, 새로 범위에 드는 집 수를 알려 줘요.');await placeAnim('school',16,15);
    st('경찰서(파란 원)와 소방서(빨간 원)도 지어요. 경찰서가 없으면 도둑이 들고, 소방서가 없으면 불이 번져요.');await dPlace('police',24,16);await dPlace('fire',13,15);
    st('학교·경찰서 같은 큰 공사는 시끄러워요. 주황 원 안의 집들이 불편해해요.');setTool('nwall');await sleep(4500);
-   st('[공공] → 방음벽을 고르고 공사장을 누르면 가림막을 쳐요. 소음이 줄고 공사 사고도 줄어요.');{const sc=dfind('school');if(sc)await placeAnim('nwall',sc.i,sc.j)}
+   st('공사장을 누르면 [방음벽 치기] 버튼이 나와요. 누르면 가림막을 쳐요. 소음이 줄고 공사 사고도 줄어요.');setTool('look');{const sc=dfind('school');if(sc){sel=sc;renderInfo(true);await sleep(2600);putFence(sc);renderInfo(true);await sleep(1800);sel=null;renderInfo(true)}}
    st('시간을 빨리 돌려요. 공사가 끝나면 범위 안 집들이 아파트로 자라요!');await camTo(10,6,32,20);await runHours(34);await sleep(3000);
    st('끝! 아파트가 되려면 학교·경찰서·소방서·병원 범위와 쓰레기 처리까지 필요해요. 미션 4에서 해 보세요.');await sleep(5000)}},
  traffic:{n:'막히는 길',m:5,min:2,ic:'car',col:'#e3803a',d:'[교통] 보기로 막힌 길을 찾아 넓은 도로·버스 정류장으로 풀어요.',steps:6,
@@ -3048,6 +3046,28 @@ function slotPick(){let rows='';for(let n=1;n<=SLOTN;n++){const d=slotInfo(n);
   $('mcard').querySelectorAll('.sdel').forEach(b=>b.onclick=()=>{if(!b.classList.contains('sure')){b.classList.add('sure');b.textContent='정말 지울까요?';snd('warn');return}
     try{localStorage.removeItem(slotKey(+b.dataset.n))}catch(e){}snd('tick');toast(b.dataset.n+'번 칸을 지웠어요.');slotPick()})}
 try{const n=+localStorage.getItem('udongne-slot');if(n>=1&&n<=SLOTN)setSlot(n)}catch(e){}
+
+/* v0.31: 방음벽 버튼 · 정기 안전 점검 팝업 · 예산 바닥이면 공공시설 중단 */
+function putFence(o){if(!o||o.fence||!(o.build>0))return;const c=nwCost(o);if(money<c){toast('예산이 모자라요. 필요한 돈 '+fmt(c)+' (지금 '+fmt(Math.max(0,money))+'). 시간을 돌려 세금을 모으거나 [현황]에서 대출을 받을 수 있어요.');snd('warn');return}
+  snapshot();o.fence=1;flags.nFence=(flags.nFence||0)+1;money-=c;floater(o.i+o.w/2,o.j+o.d/2,'−'+fmt(c),'#c63d2f');snd('place');toast(FAC[o.kind].name+' 공사장 둘레에 방음벽을 쳤어요. 이제 공사 소리가 주변 집까지 거의 가지 않아요.');afterEdit()}
+const SVCSTOP=new Set(['school','police','fire','clinic','hospital','bus','depot']);
+function inspTick(){if(!AON||modalOpen||tut||demo||idle||flags.ch||mode==='scenario')return;
+  for(const o of things)if(o.brkAt&&hours>=o.brkAt&&!(o.build>0)&&FAC[o.kind]){o.brkAt=0;o.defer=0;o.wear=100;recompute();const n=FAC[o.kind].name,c=repCost(o);pushLog(n+jo(n,'이','가')+' 멈췄어요.');
+    showEvent({ic:'wrench',eb:'고장',title:n+jo(n,'이','가')+' 멈췄어요',text:'안전 점검에서 고치라고 했는데 두 번 미뤄서 결국 멈췄어요. 멈춘 뒤에 고치면 처음 점검 때보다 6배 비싸요(짓는 값의 60%).',
+      opts:[['긴급 보수하기','−'+fmt(c)+(money<c?' · 예산이 모자라요':''),()=>{if(money<c){toast('예산이 모자라요. 보수비 '+fmt(c));return}repairFac(o)}],['나중에','시설을 눌러 언제든 보수할 수 있어요',()=>{}]]});return}
+  if(flags.nextInsp==null){flags.nextInsp=hours+10;return}if(hours<flags.nextInsp)return;flags.nextInsp=hours+60+Math.random()*24;
+  const L=things.filter(o=>ageK(o.kind)&&!(o.build>0)&&(o.wear||0)>=40&&(o.wear||0)<100).sort((a,b)=>b.wear-a.wear),bad=[];for(let k=0;k<N*N;k++)if(road[k]&&rw[k]>=60)bad.push(k);
+  if(L.length&&!(bad.length>=6&&flags.lastInsp==='fac')){flags.lastInsp='fac';const o=L[0],st=wStage(o.wear),c=repCost(o),d=o.defer||0,n=FAC[o.kind].name;
+    showEvent({ic:'wrench',eb:'정기 안전 점검',title:n+': '+(st===1?'점검이 필요해요':'금이 갔어요'),text:(st===1?'오래 써서 손볼 곳이 생겼어요. 지금 고치면 짓는 값의 10%면 돼요.':'벽에 금이 갔어요. 지금 고치면 짓는 값의 30%예요.')+(d?' 지난 점검 때도 미뤘어요. 또 미루면 곧 멈춰요(멈춘 뒤 고치면 60%).':' 미루면 더 낡아서 고치는 돈이 늘어요.'),
+      opts:[['지금 고치기','−'+fmt(c)+(money<c?' · 예산이 모자라요':''),()=>{if(money<c){toast('예산이 모자라요. 보수비 '+fmt(c));return}repairFac(o)}],['미루기',d?'곧 멈출 수 있어요':'다음 점검 때 다시 알려 줘요',()=>{o.defer=d+1;if(o.defer>=2)o.brkAt=hours+12+Math.random()*12;toast(n+' 점검을 미뤘어요.')}]]})}
+  else if(bad.length>=6){flags.lastInsp='road';const c=Math.round(bad.reduce((a,k)=>a+rw[k]*.6,0)/10)*10;
+    showEvent({ic:'road',eb:'정기 안전 점검',title:'도로에 구멍이 났어요 ('+bad.length+'칸)',text:'차가 많이 다닌 도로가 움푹 파였어요. 파인 길은 차가 덜 다녀서 막히기 쉬워요. 도로 정비소를 지으면 범위 안 도로를 저절로 고쳐요.',
+      opts:[['한꺼번에 다시 포장','−'+fmt(c)+(money<c?' · 예산이 모자라요':''),()=>{if(money<c){toast('예산이 모자라요. 보수비 '+fmt(c));return}snapshot();money-=c;flags.dRep=(flags.dRep||0)+c;for(const k of bad)rw[k]=0;flags.nRep=(flags.nRep||0)+1;snd('build');toast('도로 '+bad.length+'칸을 다시 포장했어요 (−'+fmt(c)+')');afterEdit()}],['미루기','파인 길은 그대로예요',()=>{}]]})}}
+function brokeTick(){if(demo||idle||mode==='scenario')return;
+  if(!flags.broke&&money<0){flags.broke=1;recompute();const m='예산이 바닥나서 운영비를 낼 수 없어요. 학교·경찰서·소방서·병원·버스 정류장·도로 정비소 운영을 멈췄어요. 전기·물·하수·쓰레기 시설은 계속 돌아가요.';pushLog(m);
+    if(flags.ch||modalOpen||tut){toast(m);snd('warn')}else showEvent({ic:'coin',eb:'예산 바닥',title:'공공시설이 멈췄어요',text:m+' 예산이 다시 0보다 많아지면 저절로 다시 열어요. 멈춘 동안은 그 시설 운영비도 안 나가요.',
+      opts:[...(debt+11000<=22000?[['대출 받기','+10,000 (매시간 110씩 자동으로 갚아요)',()=>{money+=10000;debt+=11000;noUndo();snd('coin');brokeTick();renderDrawer(true)}]]:[]),['알겠어요','세금이 쌓일 때까지 기다려요',()=>{}]]})}
+  else if(flags.broke&&money>=0){flags.broke=0;recompute();const m='예산이 다시 생겨서 공공시설을 다시 열었어요.';toast(m);pushLog(m)}}
 /* ================= 시작 ================= */
 updateViews();
 idle=true;newCity({mode:'free',showcase:true});hours=9;lastHour=9;
