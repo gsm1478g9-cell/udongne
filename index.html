@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.33</title>
+<title>우리 동네 짓기 v0.34</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -597,7 +597,7 @@ const WDEM={R:[0,1,3,8],C:[0,1,3,6],I:[0,3,6,9]};
 const EMIT={R:[0,0,0,0],C:[0,0,0,0],I:[0,6,12,20]};
 const FAC={
   coal:{name:'화력 발전소',cost:3000,w:2,d:2,up:20,bt:8,icon:'flame',col:'#e0703a',tags:[['토목','civil'],['에너지 시설 · 발전소','']],short:'전기 많이, 연기도 많이',desc:'석탄을 태워 전기를 많이 만들지만 연기가 많이 나요. 바람이 불어 가는 쪽에는 사람이 살기 어려워요.'},
-  wind:{name:'풍력 발전기',cost:900,w:1,d:1,up:4,bt:3,icon:'wind',col:'#4bb3c8',tags:[['토목','civil'],['에너지 시설 · 재생 에너지','']],short:'깨끗하지만 전기가 적어요',desc:'바람으로 전기를 만들어요. 오염이 없지만 만드는 전기가 적고, 바람에 따라 조금씩 달라져요.'},
+  wind:{name:'풍력 발전기',cost:900,w:1,d:1,up:4,bt:3,icon:'wind',col:'#4bb3c8',tags:[['토목','civil'],['에너지 시설 · 재생 에너지','']],short:'깨끗하지만 전기가 적어요',desc:'바람으로 전기를 만들어요. 오염이 없지만 만드는 전기가 적고, 바람에 따라 많이 달라져요(약 8~32, 평균 20).'},
   sub:{name:'변전소',cost:1200,w:1,d:1,up:6,bt:4,icon:'bolt',col:'#c9961a',tags:[['토목','civil'],['에너지 시설 · 변전','']],short:'송전선 전기를 동네용으로 바꿔요',desc:'송전선으로 온 높은 전압의 전기를 낮춰서 도로 밑 전선(배전)으로 보내요. 송전선과 도로에 함께 붙여 지어야 해요. 한 곳이 바꿀 수 있는 양은 150까지라 도시가 커지면 더 지어야 해요.'},
 solar:{name:'태양광 발전소',cost:600,w:1,d:1,up:2,bt:2,icon:'sun',col:'#f2b705',tags:[['토목','civil'],['에너지 시설 · 재생 에너지','']],short:'밤에는 쉬어요',desc:'햇빛으로 전기를 만들어요. 오염이 없지만 밤에는 발전하지 못해요.'},
   water:{name:'정수장',cost:2500,w:2,d:2,up:15,bt:6,river:true,icon:'water',col:'#2fa3d6',tags:[['토목','civil'],['환경 시설 · 상수도','']],short:'강가에 · 상류가 좋아요',desc:'강물을 끌어와 깨끗하게 만든 뒤 수도로 보내요. 끌어오는 강물이 이미 더러우면 깨끗하게 만들 수 없어요.'},
@@ -613,8 +613,8 @@ solar:{name:'태양광 발전소',cost:600,w:1,d:1,up:2,bt:2,icon:'sun',col:'#f2
   depot:{name:'도로 정비소',cost:2500,w:2,d:2,up:12,bt:4,icon:'wrench',col:'#d98a2b',tags:[['토목','civil'],['교통 시설 · 유지관리','']],short:'범위 안 도로·다리를 고쳐요',desc:'정비 트럭이 다니며 범위 안의 낡은 도로와 다리를 고쳐요. 도로는 차가 많이 다닐수록 빨리 낡아요.'},
   outlet:{name:'하수 방류구',cost:400,w:1,d:1,up:2,bt:2,river:true,icon:'outlet',col:'#7d6b4f',tags:[['토목','civil'],['환경 시설 · 하수도','']],short:'싸지만 하수를 그대로 강에',desc:'하수를 처리하지 않고 관을 통해 강에 바로 내보내요. 값이 싸고 전기가 필요 없지만, 하류 강물이 아주 더러워져요. 하수 처리장이 있으면 그쪽으로 먼저 보내요.'},
   landfill:{name:'쓰레기 매립지',cost:1500,w:2,d:2,up:6,bt:6,icon:'trash',col:'#8c7a55',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'싸지만 가득 차요 · 냄새',desc:'쓰레기를 땅에 묻어요. 값이 싸고 전기가 필요 없지만, 가득 차면 더 묻을 수 없어요. 주변 4칸은 냄새가 나고, 5칸 안의 지하수를 오염시켜요.'},
-  incin:{name:'쓰레기 소각장',cost:5000,w:2,d:2,up:25,bt:8,icon:'flame',col:'#9b5d3a',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'많이 태우고 전기도 · 연기',desc:'쓰레기를 태워서 없애고, 그 열로 전기(30)도 만들어요. 한 시간에 250까지 처리하지만 값이 비싸고 연기가 나요.'},
-  recycle:{name:'재활용 센터',cost:4000,w:2,d:2,up:15,bt:6,icon:'recycle',col:'#3fa56b',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'깨끗하게 · 수입도 조금',desc:'쓰레기를 종류별로 나눠 다시 쓸 수 있게 만들어요. 연기·냄새가 없고 판 돈으로 수입도 생기지만, 한 시간에 120까지만 처리해요.'},
+  incin:{name:'쓰레기 소각장',cost:5000,w:2,d:2,up:25,bt:8,icon:'flame',col:'#9b5d3a',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'많이 태우고 전기도 · 연기',desc:'쓰레기를 태워서 없애고, 그 열로 전기(45)도 만들어요. 한 시간에 250까지 처리하지만 값이 비싸고 연기가 나요.'},
+  recycle:{name:'재활용 센터',cost:3000,w:2,d:2,up:15,bt:6,icon:'recycle',col:'#3fa56b',tags:[['토목','civil'],['환경 시설 · 쓰레기','']],short:'깨끗하게 · 수입도 조금',desc:'쓰레기를 종류별로 나눠 다시 쓸 수 있게 만들어요. 연기·냄새가 없고 판 돈으로 수입도 생기지만, 한 시간에 180까지만 처리해요.'},
   clinic:{name:'진료소',cost:1200,w:1,d:1,up:6,bt:3,icon:'cross',col:'#e25b6a',tags:[['건축','build'],['공공용 · 의료','']],short:'환자 30명 · 작고 싸요',desc:'도로로 이어진 동네의 환자를 30명까지 진료해요. 환자는 인구에 따라 늘고, 공기나 수돗물이 나쁜 동네일수록 많아요. 진료를 받을 수 있는 집만 아파트가 돼요.'},
   hospital:{name:'종합병원',cost:5000,w:2,d:2,up:22,bt:8,icon:'cross',col:'#d43d51',tags:[['건축','build'],['공공용 · 의료','']],short:'환자 150명 · 구급차',desc:'큰 병원이라 환자를 150명까지 받아요. 구급차가 도로를 따라 다녀서 도로로 이어진 동네 어디든 맡아요.'},
   fountain:{name:'분수 광장',cost:1500,w:2,d:2,up:3,bt:3,icon:'fountain',col:'#2fa3d6',land:1,tour:15,tags:[['토목','civil'],['명소','']],short:'관광 +15 · 주민 행복',desc:'물줄기가 춤추는 광장이에요. 관광객이 찾아와 돈을 쓰고, 주변 주민이 행복해져요.'},
@@ -654,7 +654,7 @@ const tTxt=h=>h>=24?'약 '+(Math.round(h/12)/2)+'일('+Math.ceil(h)+'시간)':'�
 const tShort=h=>h>=24?(Math.round(h/12)/2)+'일':h+'시간';
 const nwCost=o=>NWC*2*(o.w+o.d);
 /* v0.12: 쓰레기·의료·증축 */
-const GDEM={R:[0,1,3,8],C:[0,1,3,6],I:[0,2,5,9]},LFCAP=30000,GCAP={landfill:200,incin:250,recycle:120};
+const GDEM={R:[0,1,3,8],C:[0,1,3,6],I:[0,2,5,9]},LFCAP=30000,GCAP={landfill:200,incin:250,recycle:180};
 const HR=b=>N>40?Math.round(b*1.67):b;
 const EXT={battery:1500,pumped:4000,depot:1500,school:1200,fire:900,police:900,clinic:700,hospital:3000,landfill:1000,water:1500,sewage:1800,incin:3000,recycle:2400};
 const EXTW={battery:'저장량 50% 많이',pumped:'저장량 50% 많이',depot:'범위 30% 넓게',school:'범위 30% 넓게',fire:'범위 30% 넓게',police:'범위 30% 넓게',clinic:'받는 환자 50% 많이',hospital:'받는 환자 50% 많이',landfill:'묻는 양 50% 많게',water:'수돗물 50% 많이',sewage:'처리량 50% 많이',incin:'태우는 양 50% 많게',recycle:'처리량 50% 많이'};
@@ -1128,7 +1128,7 @@ function recompute(){damRefresh();groundDirty=true;
   for(const o of facs){o.hvc=-1;for(let i=o.i-1;i<=o.i+o.w&&o.hvc<0;i++)for(let j=o.j-1;j<=o.j+o.d;j++){if(!inb(i,j))continue;if(i>=o.i&&i<o.i+o.w&&j>=o.j&&j<o.j+o.d)continue;if(HVC[ix(i,j)]>=0){o.hvc=HVC[ix(i,j)];break}}}
   for(const o of facs){if(o.comp<0)continue;const c=comps[o.comp];if(o.kind==='water'||o.kind==='sewage')c.pd+=5;if(o.kind==='school')c.pd+=6;if(o.kind==='fire')c.pd+=4;if(o.kind==='depot')c.pd+=3;if(o.kind==='clinic')c.pd+=3;if(o.kind==='hospital')c.pd+=8;if(o.kind==='recycle')c.pd+=4;if(o.kind==='sub')c.pd+=1;if(FAC[o.kind].land)c.pd+=5}
   for(const b of blds)if(b.comp>=0){const c=comps[b.comp];c.pd+=PDEM[b.type][b.stage]*pdF(b.type);c.wd+=WDEM[b.type][b.stage];c.sd+=WDEM[b.type][b.stage]}
-  for(const o of facs){let out=0,ren=false;if(o.kind==='coal')out=200;else if(o.kind==='incin')out=30*XM(o);else if(o.kind==='dam'){out=(50*(o.H||1)+30)*damF(flags.damLv==null?0:flags.damLv);o.damOut=out;ren=true}else if(o.kind==='wind'){out=22*(.8+.2*Math.sin(hours*.37+o.i*.7))*SEF().w;ren=true}else if(o.kind==='solar'){out=16*(1-dk)*SEF().s;ren=true}else continue;
+  for(const o of facs){let out=0,ren=false;if(o.kind==='coal')out=200;else if(o.kind==='incin')out=45*XM(o);else if(o.kind==='dam'){out=(50*(o.H||1)+30)*damF(flags.damLv==null?0:flags.damLv);o.damOut=out;ren=true}else if(o.kind==='wind'){out=(20+8*Math.sin(hours*.37+o.i*.7)+4*Math.sin(hours*.11+o.j*1.3))*SEF().w;ren=true}else if(o.kind==='solar'){out=16*(1-dk)*SEF().s;ren=true}else continue;
     o.out=out;o.sent=0;o.capped=false;
     let v=0;if(o.comp>=0){const c=comps[o.comp];v=capOn?Math.min(out,LVCAP):out;c.p+=v;if(ren)c.pr+=v}
     o.lv=v;o.sent=v;if(o.hvc>=0&&out>v){const h=HVS[o.hvc],r=out-v;h.p+=r;if(ren)h.pr+=r;h.plants++;o.sent=out}else o.capped=v<out-.01}
@@ -2570,7 +2570,7 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.33</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.34</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
     '</div>'+(slotCount()?'<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>다른 도시 불러오기 · 지우기</small></button></div>':''),true);
   if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
