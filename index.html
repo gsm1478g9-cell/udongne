@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.35</title>
+<title>우리 동네 짓기 v0.36</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -1193,7 +1193,7 @@ function recompute(){damRefresh();groundDirty=true;
   for(const b of blds){b.noise=false;if(!nzS.length||b.type==='I'||!b.stage)continue;for(const q of nzS)if(Math.hypot(b.i+.5-(q.i+q.w/2),b.j+.5-(q.j+q.d/2))<=NZR+q.w/2){b.noise=true;break}if(b.noise)nzN++}
   let pop=0,jc=0,ji=0,pd=0,pc=0,pr=0,wd=0,wc=0,sd=0,sc=0,sat=0,nR=0,airR=0;const jb=flags.factoryBoost?1.3:1;
   for(const b of blds){pop+=POP[b.type][b.stage];if(b.type==='C')jc+=JOBS.C[b.stage];if(b.type==='I')ji+=JOBS.I[b.stage]*jb;
-    if(b.type==='R'&&b.stage>0){nR++;airR+=b.air;sat+=(+b.power+ +b.water+ +b.clean+ +b.sewer+ +b.school+(b.air<10?1:0)+((b.traffic||0)<1?1:0)+(b.fireC?1:0)+(b.polC?1:0))/9*(b.noise?.7:1)*(b.trash?.85:1)*(b.smell?.85:1)*(HON&&!b.health?.9:1)}}
+    if(b.type==='R'&&b.stage>0){nR++;airR+=b.air;sat+=(+b.power+ +b.water+ +b.clean+ +b.sewer+ +b.school+(b.air<10?1:0)+((b.traffic||0)<1?1:0)+(b.fireC?1:0)+(b.polC?1:0))/9*(b.noise?.7:1)*(b.trash?.85:1)*(b.smell?.85:1)*(HON&&!b.health?.9:1)*(b.ung>0?.35:1)}}
   for(const c of comps){pd+=c.pd;pc+=c.p;pr+=c.pr;wd+=c.wd;wc+=c.w;sd+=c.sd;sc+=c.s}
   let rc=0;for(let k=0;k<N*N;k++)rc+=road[k]+(tun[k]?3:0)+(hv[k]?.5:0);
   const upBy={};for(const o of facs){const u=upOf(o.kind,o);if(u)upBy[o.kind]=(upBy[o.kind]||0)+u}let upF=0,upTop=null;for(const k in upBy){upF+=upBy[k];if(!upTop||upBy[k]>upTop[1])upTop=[k,upBy[k]]}const upR=rc*.1*DIF().up,upkeep=upF+upR+pImp*2.5;let expInc=0;if(mode!=='scenario')for(const b of blds)if(b.type==='I'&&b.stage>0&&b.out)expInc+=JOBS.I[b.stage]*.1;
@@ -1226,7 +1226,8 @@ function hourTick(){
   for(const b of stat.blds){
     if(b.ruin>0){b.ruin--;continue}
     if(b.flooded||b.fire)continue;
-    if(b.stage>b.allow){if(Math.random()<.3){b.stage--;b.anim=1;shrinkMsg(b)}}
+    if(b.stage<=b.allow)b.ung=0;
+    if(b.stage>b.allow){b.ung=(b.ung||0)+1;if(b.ung===1)angryMsg(b);if(b.ung>=GRACE){b.stage--;b.anim=1;b.ung=0;shrinkMsg(b)}}
     else if(b.stage>0&&tax>11&&demand[b.type]<-.3&&Math.random()<.05){b.stage--;b.anim=1;if(!idle&&!demo)warnOnce('leave','세금이 너무 높아서 '+(b.type==='R'?'주민이':'가게와 공장이')+' 떠나고 있어요. [현황]에서 세금을 내려 보세요.',24)}
     else if(b.stage<b.allow){const d=demand[b.type];if(Math.random()<.5*Math.max(.1,d)){b.stage++;b.anim=1;dust(b.i+.5,b.j+.5,7);growFx(b);if(b.stage===3)dust(b.i+.5,b.j+.5,6,'#ffd34d');
       if(b.type==='R'&&b.stage===3&&!flags.firstApt&&!idle){flags.firstApt=true;toast('첫 아파트가 생겼어요!');snd('coin');confetti(40)}}}}
@@ -1330,8 +1331,9 @@ function floodDepth(){return flags.floodAt>=0&&hours>=flags.floodAt&&hours<flags
 function isFlood(k){const d=floodDepth();return d>0&&floodD[k]>0&&floodD[k]<=d}
 function nearWater(i,j,r=2){for(let a=i-r;a<=i+r;a++)for(let b=j-r;b<=j+r;b++)if(inb(a,b)&&water[ix(a,b)])return true;return false}
 function leveeN(){let n=0;for(let k=0;k<N*N;k++)n+=levee[k];return n}
-function floodPlan(){floodD=new Uint8Array(N*N);let fr=[];for(let k=0;k<N*N;k++)if(water[k])fr.push(k);
-  for(let d=1;d<=2;d++){const nx=[];for(const k of fr){const i=Math.floor(k/N),j=k%N;for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const ni=i+a,nj=j+b;if(!inb(ni,nj))continue;const nk=ix(ni,nj);if(water[nk]||floodD[nk]||levee[nk]||quay[nk]||mount[nk])continue;floodD[nk]=d;nx.push(nk)}}fr=nx}}
+function floodPlan(){floodD=floodCalc()}
+function floodCalc(){const floodD=new Uint8Array(N*N);let fr=[];for(let k=0;k<N*N;k++)if(water[k]&&!sea[k])fr.push(k);
+  for(let d=1;d<=2;d++){const nx=[];for(const k of fr){const i=Math.floor(k/N),j=k%N;for(const[a,b]of[[1,0],[-1,0],[0,1],[0,-1]]){const ni=i+a,nj=j+b;if(!inb(ni,nj))continue;const nk=ix(ni,nj);if(water[nk]||floodD[nk]||levee[nk]||quay[nk]||mount[nk])continue;floodD[nk]=d;nx.push(nk)}}fr=nx}return floodD}
 const burning=()=>things.filter(o=>o.fire);
 function ignite(o){if(!o||o.fire||!(o.kind==='tree'||o.kind==='bld'&&o.stage>0))return false;o.fire=1;o.fireT=0;return true}
 /* 소방서·경찰서 범위: 40칸 지도 12칸, 큰 지도(사직, 1칸≈60m) 20칸(약 1.2km) */
@@ -1352,7 +1354,8 @@ function fireTick(){if(!burning().length)return;recompute();
     if(burning().length<10)for(let a=o.i-1;a<=o.i+o.w;a++)for(let b=o.j-1;b<=o.j+o.d;b++){if(!inb(a,b))continue;const n=tobj[ix(a,b)];if(n&&n!==o&&Math.random()<(n.kind==='tree'?.1:.18)*DIF().fire)ignite(n)}}}
 function floodTick(){if(flags.floodAt<0)return;
   if(hours<flags.floodAt){floodPlan();return}
-  if(hours<flags.floodUntil){floodPlan();if(!flags.floodStarted){flags.floodStarted=true;snd('warn');const sl=slideTick();recompute();computeTraffic();const m='강물이 넘쳤어요! 홍수가 8시간 동안 이어져요. 물에 잠긴 건물은 전기와 물이 끊기고, 잠긴 도로는 물이 빠질 때까지 통행 금지예요.'+(sl?' 큰비로 비탈의 흙이 무너져(산사태) 옹벽 없는 비탈 건물 '+sl+'채가 부서졌어요. [땅·철거] → 옹벽을 세우면 막을 수 있어요.':'');toast(m);pushLog(m)}return}
+  if(hours<flags.floodUntil){floodPlan();if(!flags.floodStarted){flags.floodStarted=true;snd('warn');const sl=slideTick();recompute();computeTraffic();const FL=things.filter(o=>o.flooded&&FAC[o.kind]&&o.kind!=='tree'),cn={};for(const o of FL)cn[FAC[o.kind].name]=(cn[FAC[o.kind].name]||0)+1;const fls=Object.entries(cn).map(([k,v])=>k+' '+v+'곳').join(', '),sw=FL.some(o=>o.kind==='sewage'),wt=FL.some(o=>o.kind==='water');
+    const m='강물이 넘쳤어요! 홍수가 8시간 동안 이어져요. 물에 잠긴 건물은 전기와 물이 끊기고, 잠긴 도로는 물이 빠질 때까지 통행 금지예요.'+(fls?' 물에 잠겨 멈춘 시설: '+fls+'.':'')+(sw?' 하수 처리장이 멈춰서 처리 못 한 하수가 강으로 흘러가요(강물이 더러워져요). 하수 처리장은 강에서 떨어진 곳에 지어도 되고, 강 쪽에 호안·제방을 쌓으면 막을 수 있어요.':'')+(wt?' 정수장이 멈춰서 수돗물이 끊겼어요.':'')+(sl?' 큰비로 비탈의 흙이 무너져(산사태) 옹벽 없는 비탈 건물 '+sl+'채가 부서졌어요. [땅·철거] → 옹벽을 세우면 막을 수 있어요.':'');toast(m);pushLog(m)}return}
   let n=0;for(const o of things)if(o.kind==='bld'&&o.wasFlooded){o.wasFlooded=false;if(o.stage>0){o.stage--;o.anim=1;n++}}
   const lv=leveeN();flags.floodAt=-1;flags.floodUntil=-1;flags.floodStarted=false;floodD=new Uint8Array(N*N);
   if(n===0){if(lv>0)flags.floodSafe=true;toast('홍수가 끝났어요. 피해 없이 잘 버텼어요!');snd('win')}else{toast('홍수가 끝났어요. 물에 잠겼던 건물 '+n+'채가 망가졌어요. 강가에 제방을 쌓아 두면 막을 수 있어요.');snd('warn')}
@@ -2415,7 +2418,7 @@ function renderInfo0(force){const o=sel,el=$('info');if(!o||(!o.tile&&!things.in
   let name='',icon='info',col='#5c6878',tags=[],checks=[],desc='';
   if(o.kind==='bld'){const T=o.type,nm={R:['빈 주거 구역','단독 주택','2층 주택','아파트'],C:['빈 상업 구역','가게','상가 건물','사무용 빌딩'],I:['빈 공업 구역','작업장','공장','큰 공장']}[T][o.stage];
     name=nm;icon=TM[T].icon;col=ZCOL[T];tags=[['건축','build'],[{R:'주거용',C:'상업용',I:'산업용'}[T],'']];if(T==='R'&&o.stage)tags.push(['주민 '+POP.R[o.stage]+'명','']);
-    const ck=(ok,l,why)=>checks.push([ok?'y':'n',l,ok?'':why]);
+    const ck=(ok,l,why)=>checks.push([ok?'y':'n',l,ok?'':why]);if(o.ung>0)checks.push(['n','주민이 화났어요! '+Math.max(1,GRACE-o.ung)+'시간 안에 빨간 조건을 고치지 않으면 한 단계 작아져요','지금은 만족도가 크게 떨어져 있어요']);
     ck(o.road,'도로 연결','근처(2칸 안)에 도로가 없어요');if(T==='I'&&o.road&&mode!=='scenario')ck(o.out,'바깥과 이어진 도로(수출)','지도 끝까지 이어진 도로가 있어야 공장 물건을 팔 수 있어요');ck(o.power,'전기',WHYT.power);ck(o.water,'수돗물',WHYT.water);if(o.water)ck(o.clean,'깨끗한 물',WHYT.dirty);
     ck(o.sewer,'하수 처리','가장 큰 건물이 되려면 필요해요');if(onSlope(o.i,o.j))ck(false,'평평한 땅',unlocked.has('rwall')?'비탈이라 2층까지만 지을 수 있고, 큰비가 오면 산사태가 날 수 있어요. [땅·철거] → 옹벽을 세우면 둘 다 해결돼요':'비탈이라 2층까지만 지을 수 있어요');if(T==='R')ck(o.school,'학교 범위','아파트가 되려면 필요해요');if(T!=='I'&&mode!=='scenario'){ck(o.polC,'경찰서 범위',(T==='R'?'아파트가':'사무용 빌딩이')+' 되려면 필요해요');ck(o.fireC,'소방서 범위',(T==='R'?'아파트가':'사무용 빌딩이')+' 되려면 필요해요')}
     if(T==='R'&&HON)ck(o.health,'진료(병원이 받아 줌)','아파트가 되려면 필요해요. 병원 자리가 모자라면 일부 집은 진료를 못 받아요');if(GON&&o.stage)ck(!o.trash,'쓰레기 수거',(T==='I'?'공장 쓰레기가 쌓였어요':(T==='R'?'아파트가':'사무용 빌딩이')+' 되려면 필요해요')+'. 매립지·소각장·재활용 센터가 모자라요');if(o.smell)checks.push(['w','쓰레기 냄새','쓰레기 매립지가 가까워요(만족도↓)']);
@@ -2582,7 +2585,7 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.35</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.36</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
     '</div>'+(slotCount()?'<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>다른 도시 불러오기 · 지우기</small></button></div>':''),true);
   if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
@@ -2675,7 +2678,7 @@ function doneFx(o){const f=FAC[o.kind],bt=o.btT||f.bt||0;snd('build');floater(o.
   else{toast(f.name+' 완공!');if(bt>=12)confetti(26)}}
 
 /* 2) 놓기 전에 자리 미리 보기(아일랜더스처럼 '좋은 자리 찾기') — 구역은 끄는 동안, 학교·경찰서·소방서·진료소·병원·공원·매립지·소각장은 고르는 동안 */
-const PHT=new Set(['school','police','fire','clinic','hospital','park','landfill','incin']);
+const PHT=new Set(['school','police','fire','clinic','hospital','park','landfill','incin','sewage','water']);
 let PHC={k:'',v:null};
 const phTok=(nm,c,n)=>nm+(c>=n?' ✓':c>0?' 일부':' ✗');
 function zoneHint(){const T=previewTilesF().filter(p=>p.ok&&inb(p.i,p.j));if(!T.length)return null;
@@ -2703,6 +2706,9 @@ function zoneHint(){const T=previewTilesF().filter(p=>p.ok&&inb(p.i,p.j));if(!T.
     else msg=dn?'공장 짓기 괜찮은 자리예요':'공장 짓기 좋은 자리예요!'}
   return{lvl,head:{R:'주거',C:'상업',I:'공업'}[tp]+' '+n+'칸 · '+msg,tok}}
 function facHint(g){const f=FAC[tool],B=stat.blds||[],R=B.filter(b=>b.type==='R'&&b.stage>0),cx=g[0]+f.w/2,cy=g[1]+f.d/2;
+  if(tool==='sewage'||tool==='water'){const fz=floodCalc();let wet=0;for(let a=g[0];a<g[0]+f.w;a++)for(let b=g[1];b<g[1]+f.d;b++)if(inb(a,b)&&fz[ix(a,b)])wet=1;
+    if(wet)return{lvl:2,head:'장마 때 강물이 넘치면 잠기는 자리예요',tok:[tool==='sewage'?'강에서 떨어진 곳에 지어도 돼요':'강 쪽에 호안·제방을 쌓아 막아요']};
+    return tool==='sewage'?{lvl:0,head:'장마에도 안 잠기는 자리예요',tok:['처리한 물은 관으로 가장 가까운 강에 내보내요']}:null}
   if(tool==='school'){const ins=R.filter(b=>Math.hypot(b.i-(g[0]+.5),b.j-(g[1]+.5))<=10.5),nw=ins.filter(b=>!b.school).length;return{lvl:nw?0:1,head:nw?'학교 범위에 새로 드는 집 '+nw+'채':'새로 범위에 드는 집이 없어요',tok:['범위 안 집 '+ins.length+'채']}}
   if(tool==='park'){const nb=R.filter(b=>Math.hypot(b.i+.5-cx,b.j+.5-cy)<=3).length;return{lvl:nb?0:1,head:nb?'가까운 집 '+nb+'채의 공기·땅값이 좋아져요':'가까이에 집이 없어요',tok:[]}}
   if(tool==='landfill'||tool==='incin'){const nb=B.filter(b=>b.stage>0&&b.type!=='I'&&Math.hypot(b.i+.5-cx,b.j+.5-cy)<=5).length;return{lvl:nb>=3?2:nb?1:0,head:nb?'가까운 집·가게 '+nb+'채가 싫어해요(땅값 ↓)':'주변에 집이 없어서 좋아요',tok:[]}}
@@ -3024,9 +3030,13 @@ function fmtU(v){return v<10?String(Math.round(v*10)/10):fmt(v)}
 /* [이름, 태양광, 풍력, 집 전기, 배너 문구, 짧은 설명] — 우리나라 기준: 봄은 맑고 해가 길어 태양광이 가장 잘, 여름은 장마·더위로 조금 줄고 냉방, 겨울은 해가 짧고 낮아 태양광↓, 북서 계절풍으로 풍력↑, 난방 */
 const SEFX=[['봄',1.1,1,1,'봄: 맑은 날이 많아 태양광 +10%','태양광 +10%'],['여름',1,.85,1.15,'여름: 바람이 약해 풍력 −15%, 냉방으로 집 전기 +15%','풍력 −15% · 집 전기 +15%'],['가을',1,1,1,'가을: 발전·전기 사용 모두 보통','보통'],['겨울',.7,1.25,1.2,'겨울: 해가 짧아 태양광 −30%, 북서풍이 세서 풍력 +25%, 난방으로 집 전기 +20%','태양광 −30% · 풍력 +25% · 집 전기 +20%']];
 function SEF(){if(mode==='scenario')return{s:1,w:1,r:1};const e=SEFX[seasonIdx()];return{s:e[1],w:e[2],r:e[3]}}
+const GRACE=24;
+function angryMsg(b){if(idle||demo||b.type!=='R'&&b.type!=='C'||b.stage<2)return;const w=(b.why||[])[0],t=NEEDT[w]||'조건이 빠진 건물';
+  if(!bubbles.some(x=>x.o===b)&&bubbles.filter(x=>x.l>0).length<3)bubbles.push({o:b,txt:'화났어요!',good:false,l:4,L:4});
+  warnOnce('angry-'+(w||'x'),'주민이 화났어요(만족도 크게 ↓): '+t+'. 하루 안에 고치지 않으면 건물이 한 단계 작아져요. 건물을 눌러 빨간 조건을 확인해요.',12)}
 function shrinkMsg(b){if(idle||demo||b.type!=='R'&&b.type!=='C')return;const w=(b.why||[])[0],t=NEEDT[w]||'조건이 빠진 건물';
   if(!bubbles.some(x=>x.o===b)&&bubbles.filter(x=>x.l>0).length<3)bubbles.push({o:b,txt:'작아졌어요',good:false,l:4,L:4});
-  warnOnce('shrink-'+(w||'x'),'건물이 작아지고 있어요: '+t+'. 조건이 빠지면 큰 건물이 한 단계씩 줄어요. 집을 눌러 빨간 조건을 확인해요.',24)}
+  warnOnce('shrink-'+(w||'x'),'하루 동안 고치지 않아서 건물이 작아졌어요: '+t+'. 집을 눌러 빨간 조건을 확인해요.',24)}
 const SATK=[['power','전기',b=>b.power,'발전소와 도로로 이어 주고, 전기가 모자라지 않게'],['water','수돗물',b=>b.water,'정수장이나 지하수 펌프'],['clean','깨끗한 물',b=>b.clean,'정수장은 상류에, 펌프 주변엔 공장·매립지를 두지 않기'],['sewer','하수 처리',b=>b.sewer,'하수 처리장(하류)'],['school','학교',b=>b.school,'학교 범위 안'],['air','맑은 공기',b=>b.air<10,'공장·발전소는 바람 아래쪽에'],['traffic','안 막히는 길',b=>(b.traffic||0)<1,'넓은 도로·버스 정류장'],['firecov','소방서',b=>b.fireC,'소방서 범위 안'],['police','경찰서',b=>b.polC,'경찰서 범위 안']];
 function showSatInfo(){const H=(stat.blds||[]).filter(b=>b.type==='R'&&b.stage>0),n=H.length;
   const rows=SATK.map(([k,nm,f,tip])=>{const c=n?H.filter(f).length:0,p=n?Math.round(c/n*100):0;return '<div class="sir"><span>'+nm+'</span><i><b style="width:'+p+'%;background:'+(p>=90?'#3fa45c':p>=60?'#e0a526':'#d9573f')+'"></b></i><em>'+p+'%</em>'+(p<90?'<small>'+tip+'</small>':'')+'</div>'}).join('');
