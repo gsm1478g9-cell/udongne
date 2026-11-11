@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.41</title>
+<title>우리 동네 짓기 v0.41.1</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -156,7 +156,7 @@ svg.i{display:block;flex:none}
 #toolTip .bpg button[data-bp="1"][aria-pressed="true"]{background:#2a6fdb}
 #toolTip .rmode button[aria-pressed="true"]{background:var(--ink);color:#fff}
 /* 정보 카드 */
-#info{left:10px;bottom:96px;width:min(330px,calc(100% - 20px));padding:13px 14px;font-size:14px}
+#info{left:10px;bottom:96px;width:min(330px,calc(100% - 20px));padding:13px 14px;font-size:14px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
 #info[hidden]{display:none}
 #info .ih{display:flex;gap:10px;align-items:flex-start}
 #info .ci{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:#fff;flex:none}
@@ -2553,7 +2553,7 @@ function layout(){hudB=$('hud').offsetHeight+18;$('mission').style.top=hudB+'px'
   mc.classList.remove('row3');vs.classList.remove('short');
   if(!narrow&&R('views').bottom>R('mapctl').top-6){mc.classList.add('row3');if(gr.right-R('dock').right>=160)mc.style.bottom='10px';if(R('views').bottom>R('mapctl').top-6)vs.classList.add('short')}
   if(tipOn&&hit(R('toolTip'),R('mapctl')))mc.style.bottom=(b0+lift+52)+'px';
-  $('info').style.bottom=(b0+lift+(tipOn?52:0))+'px';placeBp()}
+  const ib=b0+lift+(tipOn?52:0);$('info').style.bottom=ib+'px';$('info').style.maxHeight=Math.max(180,H-ib-12)+'px';placeBp()}
 function resize(){W=game.clientWidth;H=game.clientHeight;DPR=effDPR();GC.key='';cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);layout();
   SMIN=fitTiles(0,0,N,N).s*.85;if(first){setView(fitTiles(UL.i0,UL.j0,UL.i1,UL.j1));first=false}else clampCam()}
 
@@ -2602,8 +2602,8 @@ function renderInfo0(force){const o=sel,el=$('info');if(!o||(!o.tile&&!things.in
     if(T!=='I'&&o.stage){const tr=o.traffic||0;checks.push([tr>1.5?'n':tr>.8?'w':'y','교통 '+(tr>1.5?'막힘':tr>.8?'조금 막힘':'원활'),tr>1.5?'길이 막혀서 더 크지 못해요. 넓은 도로나 버스 정류장이 필요해요':''])}
     if(T!=='I'&&o.stage){const lv=LV[ix(o.i,o.j)]||0;checks.push([lv<30?'n':lv<55?'w':'y','땅값 '+Math.round(lv)+' ('+lvName(lv)+')',lv<30?'공원·학교를 가까이, 공장·쓰레기 시설은 멀리 두면 올라요. 땅값이 높을수록 세금이 많이 걷혀요':''])}
     const a=o.air||0,lim=T==='R'?10:30;checks.push([a>lim?'n':a>5?'w':'y','공기 '+airName(a)+' ('+a.toFixed(0)+')',a>lim?'공장 연기가 날아오는 곳이에요':'']);
-    if(o.noise)checks.push(['w','공사 소음','근처 공사장 소리 때문에 시끄러워요(만족도↓). 공사장 둘레에 방음벽을 치면 조용해져요']);if(T==='R'&&o.stage&&mode!=='scenario')checks.push([o.tnz?'w':'y',o.tnz?'차 소리 시끄러움(큰길 옆)':'차 소리 조용함',o.tnz?'차가 많이 다니는 길 옆이라 시끄러워요(만족도·땅값 ↓). 길가에 방음벽을 치거나 집 옆에 나무·공원을 두면 줄어요':'']);if(densOn()&&T!=='I'&&o.stage===3&&!o.fire&&!o.flooded){const lv=LV[ix(o.i,o.j)]||0,ms=[];if(lv<LUXLV)ms.push('땅값 '+LUXLV+' 이상(지금 '+Math.round(lv)+')');if(T==='R'){if(o.tnz||o.noise)ms.push('조용한 곳');if((o.air||0)>=5)ms.push('아주 맑은 공기');if(o.smell)ms.push('냄새 없음')}else{if((o.air||0)>=10)ms.push('맑은 공기');if((o.traffic||0)>1)ms.push('안 막히는 길');if(o.noise)ms.push('조용한 곳')}if(o.trash)ms.push('쓰레기 수거');checks.push(o.lux?['y','고급 건물 · 세금 1.5배 · 만족도 +10%','']:ms.length?['w','고급 건물까지: '+ms.join(' · '),'공원·강·학교·병원은 가까이, 공장·쓰레기 시설·큰길은 멀리 두면 돼요']:['y','고급 건물이 되는 중 · '+Math.max(1,LUXH-(o.lxT||0))+'시간 남음',''])}
-    desc=o.stage<o.allow?(JBON()&&(DEM0[T]||0)<=0?{R:'조건은 갖췄지만 지금은 일자리가 모자라서 이사 오는 사람이 없어요(주거 수요 없음). 가게·공장을 지어 보세요.',C:'조건은 갖췄지만 지금은 손님(주민)이 모자라서 가게가 늘지 않아요. 집을 더 지어 보세요.',I:'조건은 갖췄지만 지금은 일할 사람이 모자라서 공장이 늘지 않아요. 집을 더 지어 보세요.'}[T]:'조건이 갖춰져서 곧 커질 수 있어요.'):o.stage>o.allow?'조건이 나빠져서 건물이 작아지고 있어요.':o.stage===3?(o.lux?'고급 건물이에요. 세금이 1.5배 걷히고 주민 만족도도 높아요. 땅값이 떨어지거나 시끄러워진 채로 하루가 지나면 보통 건물로 돌아가요.':'가장 크게 자랐어요.'+(densOn()&&T!=='I'?' 땅값 '+LUXLV+' 이상 · 조용함 · 맑은 공기를 갖추면 고급 건물이 돼요.':'')):'다음 단계로 크려면 빨간 항목을 해결해야 해요.';
+    if(o.noise)checks.push(['w','공사 소음','근처 공사장 소리 때문에 시끄러워요(만족도↓). 공사장 둘레에 방음벽을 치면 조용해져요']);if(T==='R'&&o.stage&&mode!=='scenario')checks.push([o.tnz?'w':'y',o.tnz?'차 소리 시끄러움(큰길 옆)':'차 소리 조용함',o.tnz?'차가 많이 다니는 길 옆이라 시끄러워요(만족도·땅값 ↓). 길가에 방음벽을 치거나 집 옆에 나무·공원을 두면 줄어요':'']);if(densOn()&&T!=='I'&&o.stage===3&&!o.fire&&!o.flooded){const lv=LV[ix(o.i,o.j)]||0,ms=[];if(lv<LUXLV)ms.push('땅값 '+LUXLV+' 이상(지금 '+Math.round(lv)+')');if(T==='R'){if(o.tnz||o.noise)ms.push('조용한 곳');if((o.air||0)>=5)ms.push('아주 맑은 공기');if(o.smell)ms.push('냄새 없음')}else{if((o.air||0)>=10)ms.push('맑은 공기');if((o.traffic||0)>1)ms.push('안 막히는 길');if(o.noise)ms.push('조용한 곳')}if(o.trash)ms.push('쓰레기 수거');checks.push(o.lux?['y','고급 건물 · 세금 1.5배 · 만족도 +10%','']:ms.length?['w','고급 건물까지: '+ms.join(' · '),'공원·강·학교는 가까이, 공장·큰길은 멀리']:['y','고급 건물이 되는 중 · '+Math.max(1,LUXH-(o.lxT||0))+'시간 남음',''])}
+    desc=o.stage<o.allow?(JBON()&&(DEM0[T]||0)<=0?{R:'조건은 갖췄지만 지금은 일자리가 모자라서 이사 오는 사람이 없어요(주거 수요 없음). 가게·공장을 지어 보세요.',C:'조건은 갖췄지만 지금은 손님(주민)이 모자라서 가게가 늘지 않아요. 집을 더 지어 보세요.',I:'조건은 갖췄지만 지금은 일할 사람이 모자라서 공장이 늘지 않아요. 집을 더 지어 보세요.'}[T]:'조건이 갖춰져서 곧 커질 수 있어요.'):o.stage>o.allow?'조건이 나빠져서 건물이 작아지고 있어요.':o.stage===3?(o.lux?'땅값이 떨어지거나 시끄러워진 채로 하루가 지나면 보통 건물로 돌아가요.':'가장 크게 자랐어요.'):'다음 단계로 크려면 빨간 항목을 해결해야 해요.';
     if(o.lm&&o.stage)checks.push(['y','명소 근처라 주민이 더 행복해요',''])
     if(o.fire){tags.push(['불남','lock']);desc='불이 났어요! 불난 곳을 누르면 소방 헬기가 출동해요(−300).'}if(o.flooded){tags.push(['물에 잠김','lock']);desc='홍수로 물에 잠겼어요. 물이 빠지면 조금 망가진 채로 돌아와요.'}if(o.ruin>0){name='불탄 자리';desc='잔해를 치우는 중이에요(약 '+o.ruin+'시간). 다 치우면 다시 건물이 생겨요.'}}
   else if(FAC[o.kind]){const f=FAC[o.kind];name=f.name;icon=f.icon;col=f.col;tags=f.tags.slice();desc=f.desc;
@@ -2762,7 +2762,7 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.41</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.41.1</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
     '</div>'+(slotCount()?'<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>다른 도시 불러오기 · 지우기</small></button></div>':''),true);
   if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
