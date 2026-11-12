@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="우리 동네">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffb21a'/%3E%3Cpath d='M12 50V32l10-6v24M22 50V18l14-4v36M36 50V26l14 5v19M10 50h44' fill='none' stroke='%235a3600' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<title>우리 동네 짓기 v0.42</title>
+<title>우리 동네 짓기 v0.44</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -78,7 +78,7 @@ svg.i{display:block;flex:none}
 #mission li.ok .bar2 i{background:linear-gradient(90deg,#6fd08a,#2fa356)}
 #mission .mtime{display:flex;align-items:center;gap:5px;margin-top:9px;font-family:var(--display);font-size:15px;color:var(--accent-ink);font-variant-numeric:tabular-nums}
 #mission .mtime.low{color:var(--bad)}
-#mission .fold{min-height:36px;min-width:36px;padding:0;display:grid;place-items:center;background:var(--soft)}
+#mission .fold{min-height:40px;min-width:40px;padding:0;display:grid;place-items:center;background:var(--soft)}
 #mission.folded p,#mission.folded .mchecks,#mission.folded .hint{display:none}
 #mission.compact p,#mission.compact .hint,#mission.compact .reqs{display:none}
 #mission .hint{display:flex;gap:6px;margin-top:8px;font-size:12.5px;color:var(--civil);background:var(--civil-soft);border-radius:8px;padding:6px 8px}
@@ -125,7 +125,7 @@ svg.i{display:block;flex:none}
 .item .price{display:flex;flex-wrap:wrap;align-items:center;gap:0 4px;font-family:var(--display);font-size:14px;color:var(--accent-ink);margin-top:auto}
 .item.locked{opacity:.55}
 .item[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--accent);background:var(--accent-soft)}
-#toolTip{left:50%;transform:translateX(-50%);bottom:96px;display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;font-size:14px;white-space:nowrap;max-width:calc(100% - 20px)}
+#toolTip{left:50%;transform:translateX(-50%);bottom:96px;display:flex;align-items:center;gap:8px;padding:4px 6px 4px 12px;font-size:14px;white-space:nowrap;max-width:calc(100% - 20px)}
 @media (min-width:761px){#toolTip{max-width:calc(100% - 196px)}}
 #toolTip[hidden]{display:none}
 #toolTip .bpt{padding:0 10px;display:flex;align-items:center;gap:4px;font-family:var(--display);font-size:14px;flex:none}
@@ -134,7 +134,7 @@ svg.i{display:block;flex:none}
 #bp[hidden]{display:none}
 @media (min-width:1000px){#bp{width:max-content}}
 #bp b{font-family:var(--display);font-weight:400;font-size:16px}
-#bp button{min-height:36px;font-family:var(--display);font-size:14.5px;background:var(--soft)}
+#bp button{min-height:42px;font-family:var(--display);font-size:14.5px;background:var(--soft)}
 #bp .go{background:#2f8a4e;color:#fff}
 #toolTip b{font-family:var(--display);font-weight:400;font-size:16px}
 #info .xbtn{display:block;width:100%;margin-top:8px;padding:8px 10px;border:0;border-radius:10px;background:#2f8a4e;color:#fff;font:inherit;font-size:14px;cursor:pointer}
@@ -150,9 +150,9 @@ svg.i{display:block;flex:none}
 #toolTip .soil{flex:none;font-size:13px;color:#7a5a32;background:#f3eadb;border-radius:8px;padding:3px 8px}
 #toolTip .soil b{font-size:14px}
 #toolTip span{overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
-#toolTip button{min-height:36px;min-width:36px;padding:0;display:grid;place-items:center;background:var(--soft)}
-#toolTip .rmode{display:flex;gap:3px;background:var(--soft);border-radius:10px;padding:3px;flex:none}
-#toolTip .rmode button{padding:0 10px;font-family:var(--display);font-size:14px;background:transparent;min-height:34px;display:flex}
+#toolTip button{min-height:40px;min-width:40px;padding:0;display:grid;place-items:center;background:var(--soft)}
+#toolTip .rmode{display:flex;gap:3px;background:var(--soft);border-radius:10px;padding:2px;flex:none}
+#toolTip .rmode button{padding:0 10px;font-family:var(--display);font-size:14px;background:transparent;min-height:40px;display:flex}
 #toolTip .bpg button{align-items:center;gap:3px}
 #toolTip .bpg button[data-bp="1"][aria-pressed="true"]{background:#2a6fdb}
 #toolTip .rmode button[aria-pressed="true"]{background:var(--ink);color:#fff}
@@ -162,7 +162,7 @@ svg.i{display:block;flex:none}
 #info .ih{display:flex;gap:10px;align-items:flex-start}
 #info .ci{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;color:#fff;flex:none}
 #info .nm{font-family:var(--display);font-size:21px;line-height:1.15}
-#info .x{margin-left:auto;min-height:30px;min-width:30px;padding:0;display:grid;place-items:center;background:var(--soft)}
+#info .x{margin-left:auto;min-height:40px;min-width:40px;padding:0;display:grid;place-items:center;background:var(--soft)}
 .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
 .tag{font-size:12px;padding:1px 8px;border-radius:999px;background:var(--soft);color:var(--muted)}
 .tag.build{background:var(--build-soft);color:var(--build)}
@@ -189,6 +189,7 @@ svg.i{display:block;flex:none}
 #sns .feed b{font-size:13px;margin-right:6px}
 #sns .feed small{color:var(--muted);font-size:11.5px}
 #sns .feed p{margin:3px 0 0;font-size:13.5px;line-height:1.4}
+#mcard button{transition:opacity .18s}#mcard.hold button{pointer-events:none;opacity:.55}
 #snsBtn{position:relative}#statBtn{position:relative}#statBtn.ndot::after{content:'';position:absolute;top:4px;right:4px;width:9px;height:9px;border-radius:50%;background:#d9473a;box-shadow:0 0 0 2px #fff}
 #snsBtn .sbdg{position:absolute;top:2px;right:2px;min-width:16px;height:16px;border-radius:8px;background:#d9473a;color:#fff;font:600 10px/16px system-ui;font-style:normal;padding:0 4px}
 #drawer h3{font-family:var(--display);font-weight:400;font-size:20px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:center}
@@ -240,6 +241,7 @@ svg.i{display:block;flex:none}
 .stars .off{color:#dfe5ea}
 .mnote{margin:14px 0 0;font-size:12.5px;color:#6b7783}
 .note{color:var(--muted);font-size:12.5px;margin:8px 4px 0}
+@media (min-height:580px){html,body{height:100%;overflow:hidden;overscroll-behavior:none}.note{display:none}}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .note{color:#8f9cab}}
 :root[data-theme="dark"] .note{color:#8f9cab}
 @media (max-width:760px){.brand b{display:none}.brand small{margin:0;font-size:16px;color:var(--ink)}.brand{padding-right:12px}.pill{padding:0 10px 0 6px}.pill .pk{display:none}.cat{width:60px}.mcard h2{font-size:26px}
@@ -407,7 +409,7 @@ svg.i{display:block;flex:none}
 .chcode small{font-size:12.5px;color:#6b4300}
 @media (max-width:760px){.chout{grid-template-columns:1fr;gap:4px}}
 /* 세로 태블릿(800): 땅 고르기 안내 줄의 닫기 버튼이 밖으로 삐져나오던 것(v0.24부터) */
-@media (max-width:900px){#toolTip{gap:5px;padding-left:8px}#toolTip .rmode button{padding:0 7px}#toolTip .soil{padding:3px 6px}}
+@media (max-width:900px){#toolTip{gap:5px;padding-left:8px}#toolTip .rmode button{padding:0 9px}#toolTip .soil{padding:3px 6px}}
 @media (max-width:640px){.chset{grid-template-columns:1fr}.chbig{font-size:38px}.chbd li{grid-template-columns:6.5em 1fr 5em}}
 .qrow{display:flex;align-items:center;gap:10px;margin:2px 0 6px}
 .qrow label{font-family:var(--display);font-size:15px}
@@ -1334,7 +1336,7 @@ function snsTick(){if(idle||demo||tut||!stat.blds||(stat.pop||0)<30)return;if(fl
   const L=bad.length&&Math.random()<.7?bad:good,tw=L.reduce((a,x)=>a+x[0],0);let r=Math.random()*tw,q=0;while(q<L.length-1&&(r-=L[q][0])>0)q++;const e=L[q];snsPost(e[1],L===good,e[2])}
 function updSnsBtn(){const b=$('snsBtn');if(!b)return;b.innerHTML=ico('chat',18)+(snsNew?'<i class="sbdg">'+snsNew+'</i>':'')}
 function renderSns(){const el=$('sns');if(!el||el.hidden)return;snsNew=0;updSnsBtn();
-  el.innerHTML='<h3>시민 SNS<button type="button" aria-label="닫기" id="snsX">'+ico('x',16)+'</button></h3>'+(SNS.length?'<ul class="feed">'+SNS.map(p=>{const d=Math.floor(p.h/24)+1,hh=Math.floor(((p.h%24)+24)%24);return'<li class="'+(p.good?'g':'b')+'"><span class="fc">'+p.face+'</span><div><b>'+esc(p.who)+'</b><small>'+d+'일 '+String(hh).padStart(2,'0')+':00</small><p>'+esc(p.txt)+'</p></div></li>'}).join('')+'</ul>':'<p class="tiny">아직 글이 없어요. 도시가 커지면 시민들이 글을 올려요.</p>');
+  el.innerHTML='<h3>시민 SNS<button type="button" aria-label="닫기" id="snsX">'+ico('x',16)+'</button></h3>'+(SNS.length?'<ul class="feed">'+SNS.map(p=>{const d=Math.floor(p.h/24)+1,hh=Math.floor(((p.h%24)+24)%24);return'<li class="'+(p.good?'g':'b')+'"><span class="fc">'+esc(p.face)+'</span><div><b>'+esc(p.who)+'</b><small>'+d+'일 '+String(hh).padStart(2,'0')+':00</small><p>'+esc(p.txt)+'</p></div></li>'}).join('')+'</ul>':'<p class="tiny">아직 글이 없어요. 도시가 커지면 시민들이 글을 올려요.</p>');
   $('snsX').onclick=()=>{el.hidden=true;$('snsBtn').setAttribute('aria-pressed','false')}}
 function lfTick(){if(idle)return;for(const o of things)if(o.kind==='landfill'&&!(o.build>0)&&o.gUse>0){const cap=LFCAP*XM(o),was=(o.fv||0)/cap;o.fv=(o.fv||0)+o.gUse;const now=o.fv/cap;
     if(now>=1&&was<1){o.fv=cap;warnOnce('lffull','쓰레기 매립지가 가득 찼어요! 새 매립지를 짓거나, 증축하거나, 소각장·재활용 센터로 쓰레기를 줄여 보세요.',12);recompute()}else if(now>=.8&&was<.8)warnOnce('lf80','쓰레기 매립지가 80% 찼어요. 곧 가득 차요.',24)}
@@ -1433,7 +1435,7 @@ function disasterTick(){fireTick();floodTick();
   if(!opts.length){flags.nextDisaster=hours+8;return}
   const d=opts[Math.random()*opts.length|0];flags.nextDisaster=hours+(30+Math.random()*24)*DIF().dis;
   if(d==='fire')startFire();
-  else if(d==='flood'){flags.floodAt=hours+10;flags.floodUntil=hours+18;flags.floodStarted=false;floodPlan();snd('warn');const m='장마 예보! 10시간 뒤 강물이 넘쳐요. 파란 점선 칸이 물에 잠길 거예요. [공공] → 제방을 강가에 빈틈없이 쌓아 막아 보세요.'+(unlocked.has('quay')?' 호안을 쌓거나 강가 땅에 흙을 한 단 쌓아도(성토) 안 잠겨요.':'')+(unlocked.has('rwall')&&things.some(slideRisk)?' 큰비가 오면 옹벽 없는 비탈에서 산사태가 날 수 있어요.':'');toast(m);pushLog(m)}
+  else if(d==='flood'){flags.floodAt=hours+10;flags.floodUntil=hours+18;flags.floodStarted=false;floodPlan();snd('warn');const slow=running&&speed>1&&!flags.ch;if(slow){speed=1;setSpeedUI()}const m='장마 예보! 10시간 뒤 강물이 넘쳐요.'+(slow?' 대비할 수 있게 1배속으로 늦췄어요.':'')+' 파란 점선 칸이 물에 잠길 거예요. [공공] → 제방을 강가에 빈틈없이 쌓아 막아 보세요.'+(unlocked.has('quay')?' 호안을 쌓거나 강가 땅에 흙을 한 단 쌓아도(성토) 안 잠겨요.':'')+(unlocked.has('rwall')&&things.some(slideRisk)?' 큰비가 오면 옹벽 없는 비탈에서 산사태가 날 수 있어요.':'');toast(m);pushLog(m)}
   else quake()}
 /* 주민 요청 */
 const NAMES=['서연','민준','하은','도윤','지우','시우','수아','예준','지민','주원','하린','건우','유나','준서','다은','은우'];
@@ -1610,7 +1612,7 @@ const catBtn=id=>document.querySelector('#dock [data-cat="'+id+'"]');
 function tutRoads(){let n=0;for(let i=UL.i0;i<UL.i1;i++)for(let j=UL.j0;j<UL.j1;j++)n+=road[ix(i,j)]?1:0;return n}
 const TUT=[
   {t:'도로 고르기',x:'아래 도구 막대에서 [도로] 버튼을 눌러요.',el:()=>catBtn('road'),done:()=>tool==='road'},
-  {t:'도로 깔기',x:'노란 화살표를 따라, 서쪽에서 들어오는 도로 끝부터 화살표 방향으로 끌어서 도로를 이어요.',map:'road',done:()=>tutRoads()>=tut.r0+6},
+  {t:'도로 깔기',x:'노란 화살표를 따라, 서쪽에서 들어오는 도로 끝부터 화살표 방향으로 끌어서 도로를 이어요.',map:'road',done:()=>tutRoads()>=tut.r0+Math.max(6,((tut.g&&tut.g.len)||9)-2)},
   {t:'주거 구역 고르기',x:'[주거] 버튼을 눌러요.',el:()=>catBtn('R'),done:()=>tool==='R'},
   {t:'집 지을 땅 칠하기',x:'방금 깐 도로 옆을 끌어서 초록색으로 칠해요. 하얀 칸이 집이 생길 수 있는 곳이에요.',map:'zone',done:()=>cnt(b=>b.type==='R')>=5},
   {t:'발전소 고르기',x:'[전기] 버튼을 눌러 화력 발전소를 골라요(카드가 펼쳐지면 [화력 발전소]를 눌러요).',el:()=>openCat==='pow'?document.querySelector('#fly [data-t="coal"]'):catBtn('pow'),done:()=>tool==='coal'},
@@ -1621,7 +1623,13 @@ function tutGeo(){const e=MAPD.entryJ,i0=UL.i0,ok=(i,j)=>inb(i,j)&&!water[ix(i,j
   const lineOk=(dx,dy)=>{for(let s=1;s<=8;s++)if(!ok(i0+dx*s,e+dy*s))return false;return true};let d=[1,0];if(!lineOk(1,0)){if(lineOk(0,1))d=[0,1];else if(lineOk(0,-1))d=[0,-1]}
   let zone,coal;if(d[0]){let fa=0,fb=0;for(let i=i0+1;i<i0+8;i++){for(const j of[e-2,e-1])if(ok(i,j))fa++;for(const j of[e+1,e+2])if(ok(i,j))fb++}zone=fb>fa?[i0+1,e+1,7,2]:[i0+1,e-2,7,2];coal=[i0+8,fb>fa?e-2:e+1]}
   else{zone=d[1]>0?[i0+1,e+1,2,7]:[i0+1,e-7,2,7];coal=d[1]>0?[i0+1,e+8]:[i0+1,e-9]}
-  return{d,zone,coal,a:[i0,e],b:[i0+d[0]*9,e+d[1]*9]}}
+  let len=9;{const E=75,WS=[DIRS[MAPD.wind][1],DIRS[3][1]].map(v=>{const l=Math.hypot(v[0],v[1]);return[v[0]/l,v[1]/l]}),inZ=(i,j)=>i>=zone[0]&&i<zone[0]+zone[2]&&j>=zone[1]&&j<zone[1]+zone[3];
+   let L=0;while(L<13&&ok(i0+d[0]*(L+1),e+d[1]*(L+1)))L++;const onL=(i,j)=>{for(let s2=0;s2<=L;s2++)if(i===i0+d[0]*s2&&j===e+d[1]*s2)return s2;return -1},free=(i,j)=>ok(i,j)&&!road[ix(i,j)]&&!inZ(i,j)&&onL(i,j)<0&&!(tobj[ix(i,j)]&&tobj[ix(i,j)].kind!=='tree');
+   const score=(ci,cj)=>{let m=0;for(const[wx,wy]of WS)for(let i=zone[0];i<zone[0]+zone[2];i++)for(let j=zone[1];j<zone[1]+zone[3];j++){const dx=i+.5-(ci+1),dy=j+.5-(cj+1),al=dx*wx+dy*wy,pp=Math.abs(dx*wy-dy*wx),sg=1+Math.max(0,al)*.3,v=al>=0?E*Math.exp(-al/6)*Math.exp(-pp*pp/(2*sg*sg)):E*Math.exp(al*1.3)*Math.exp(-pp*pp/2);if(v>m)m=v}return m};
+   let best=null;for(let ci=i0-2;ci<=i0+15;ci++)for(let cj=e-15;cj<=e+15;cj++){if(!(free(ci,cj)&&free(ci+1,cj)&&free(ci,cj+1)&&free(ci+1,cj+1)))continue;let ad=-1;for(const[a,b]of[[ci,cj-1],[ci+1,cj-1],[ci,cj+2],[ci+1,cj+2],[ci-1,cj],[ci-1,cj+1],[ci+2,cj],[ci+2,cj+1]]){const s2=onL(a,b);if(s2>=2&&(ad<0||s2<ad))ad=s2}if(ad<0)continue;
+     const sc=score(ci,cj),key=(sc<4?0:Math.round(sc))*100+ad;if(!best||key<best.key)best={key,sc,ad,c:[ci,cj]}}
+   if(best&&best.sc<score(coal[0],coal[1])-1){coal=best.c;len=Math.max(9,Math.min(L,best.ad+1))}}
+  return{d,zone,coal,len,a:[i0,e],b:[i0+d[0]*len,e+d[1]*len]}}
 function startTut(){tut={k:0,t:0,r0:tutRoads(),g:tutGeo()};{const g=tut.g,xs=[g.a[0],g.b[0],g.zone[0],g.zone[0]+g.zone[2],g.coal[0]+2],ys=[g.a[1],g.b[1],g.zone[1],g.zone[1]+g.zone[3],g.coal[1]+2];if(W)setView(fitTiles(Math.min(...xs)-7,Math.min(...ys)-5,Math.max(...xs)+5,Math.max(...ys)+3))}setTool('look');showTut();renderMission(true)}
 function showTut(){const st=TUT[tut.k];$('coach').hidden=false;$('coachStep').textContent=(tut.k+1)+' / '+TUT.length;$('coachTitle').textContent=st.t;$('coachText').textContent=st.x;layout()}
 function endTut(){tut=null;$('coach').hidden=true;$('coachRing').hidden=true;layout();renderMission(true);renderToolTip()}
@@ -1629,7 +1637,7 @@ function tutTick(dt){if(!tut)return;tut.t+=dt;const st=TUT[tut.k];
   if((st.skip&&st.skip())||st.done()){if(st.last){endTut();snd('win');fireworks(3);return}tut.k++;tut.t=0;snd('coin');showTut();return}
   const ring=$('coachRing'),el=st.el&&st.el();if(el&&el.offsetParent){const r=el.getBoundingClientRect(),g=game.getBoundingClientRect();ring.hidden=false;ring.style.left=(r.left-g.left-6)+'px';ring.style.top=(r.top-g.top-6)+'px';ring.style.width=(r.width+12)+'px';ring.style.height=(r.height+12)+'px'}else ring.hidden=true}
 function drawTutMap(){if(!tut)return;const st=TUT[tut.k];if(!st.map)return;const e=MAPD.entryJ,i0=UL.i0,a=.5+.5*Math.sin(t*6),g=tut.g||tutGeo();
-  if(st.map==='road'){ctx.globalAlpha=.6+.4*a;(g.d[0]?arrowW(i0,e+.5,1,0,9,'#ffb21a',5):arrowW(i0+.5,e+(g.d[1]>0?1:0),0,g.d[1],9,'#ffb21a',5));ctx.globalAlpha=1;const p=PW(i0+.5,e+.5,2);circ(p[0],p[1],8+4*a,'rgba(255,178,26,.45)')}
+  if(st.map==='road'){ctx.globalAlpha=.6+.4*a;(g.d[0]?arrowW(i0,e+.5,1,0,g.len||9,'#ffb21a',5):arrowW(i0+.5,e+(g.d[1]>0?1:0),0,g.d[1],g.len||9,'#ffb21a',5));ctx.globalAlpha=1;const p=PW(i0+.5,e+.5,2);circ(p[0],p[1],8+4*a,'rgba(255,178,26,.45)')}
   if(st.map==='zone'){const r=vrect(g.zone[0],g.zone[1],g.zone[2],g.zone[3]);ctx.setLineDash([8,5]);poly(rect(r[0],r[1],r[2],r[3]),'rgba(76,175,99,'+(.15+.15*a)+')','#ffb21a',3);ctx.setLineDash([])}
   if(st.map==='coal'){const r=vrect(g.coal[0],g.coal[1],2,2);ctx.setLineDash([8,5]);poly(rect(r[0],r[1],r[2],r[3]),'rgba(255,178,26,'+(.15+.2*a)+')','#ffb21a',3);ctx.setLineDash([])}}
 /* ================= 계절·불꽃놀이·사람 ================= */
@@ -1661,7 +1669,7 @@ function drawPed(c){const[wx,wy]=pedPos(c),tx=Math.max(0,Math.min(N-1,Math.floor
 
 /* ================= 사건 카드 ================= */
 const EVENTS=[
-  {id:'bridge',icon:'road',when:()=>hasBridge()&&(AON?bridgeW()>=50:hours>=flags.bridgeNext)&&flags.bridgeClosedUntil<0&&!flags.bridgeRisk,
+  {id:'bridge',icon:'road',when:()=>AON&&hasBridge()&&bridgeW()>=50&&flags.bridgeClosedUntil<0&&!flags.bridgeRisk,
    title:'다리에 금이 갔어요',text:'정기 안전 점검에서 다리 기둥에 금이 간 것을 찾았어요. 지금 고치면 돈이 들지만, 미루면 위험해질 수 있어요.',
    opts:[['지금 보수하기','예산 −1,500 · 안전하게 계속 써요',()=>{money-=1500;flags.bridgeNext=hours+96;for(let k=0;k<N*N;k++)if(road[k]&&water[k])rw[k]=0;pushLog('다리를 미리 보수했어요. 유지 관리 덕분에 안전해요.');snd('place')}],
          ['나중에 하기','지금은 돈을 아끼지만 다리가 위험해질 수 있어요',()=>{flags.bridgeRisk=hours+6+Math.random()*8;flags.bridgeNext=hours+999;pushLog('다리 보수를 미뤘어요.')}]]},
@@ -1709,7 +1717,7 @@ function renderMission(force){const el=$('mission');
   if(demo||idle||tut||(!goal&&mode!=='free')){el.hidden=true;return}
   el.hidden=false;el.style.top=hudB+'px';
   const fo=el.classList.contains('folded'),fb='<button class="fold" type="button" aria-label="접기/펼치기">'+ico(fo?'plus':'minus',16)+'</button>';
-  const qh=qOn?quests.map(q=>{const d=QDEF[q.id],p=Math.min(qProg(q),q.need),left=Math.max(0,q.until-hours);return'<li class="rq"><i class="av" style="background:'+q.col+'">'+esc(q.who[0])+'</i><div class="rt"><div class="row"><b>'+esc(d.t)+'</b><span class="rw">+'+fmt(q.rw)+'</span></div><small>'+esc(q.who)+' · '+fmt(p)+' / '+fmt(q.need)+' · '+Math.ceil(left)+'시간 남음</small><div class="bar2"><i style="width:'+Math.max(4,p/q.need*100)+'%"></i></div></div></li>'}).join(''):'';
+  const qh=qOn?quests.map(q=>{const d=QDEF[q.id],p=Math.min(qProg(q),q.need),left=Math.max(0,q.until-hours);return'<li class="rq"><i class="av" style="background:'+(okCol(q.col)?q.col:'#4f7fc4')+'">'+esc(q.who[0])+'</i><div class="rt"><div class="row"><b>'+esc(d.t)+'</b><span class="rw">+'+fmt(q.rw)+'</span></div><small>'+esc(q.who)+' · '+fmt(p)+' / '+fmt(q.need)+' · '+Math.ceil(left)+'시간 남음</small><div class="bar2"><i style="width:'+Math.max(4,p/q.need*100)+'%"></i></div></div></li>'}).join(''):'';
   const reqs=qOn?'<div class="reqs"><div class="rh">'+ico('users',15)+'주민 요청'+(quests.length?'':'<span style="color:var(--muted);font-family:var(--body);font-size:12px;margin-left:4px">곧 찾아와요</span>')+'</div>'+(quests.length?'<ul>'+qh+'</ul>':'')+'</div>':'';
   let k,html;
   if(flags.ch){const R=chCard(fo,fb);k=R[0];html=R[1]}else if(!goal){k='free'+fo+qh+cityName+(flags.rank||0);html='<div class="mh"><span class="ml">'+ico('city',15)+'자유 모드 · '+RANKS[flags.rank||0][0]+'</span>'+fb+'</div><div class="mt">'+esc(cityName)+' 키우기</div><p>'+(flags.rank<5?'인구 '+fmt(RANKS[(flags.rank||0)+1][1])+'명이 되면 '+RANKS[(flags.rank||0)+1][0]+ro(RANKS[(flags.rank||0)+1][0])+' 승격해요. ':'')+'주민 요청을 들어주면 보상을 받아요.</p>'+reqs}
@@ -2496,7 +2504,7 @@ function draw(dt){seasonNow=seasonIdx();seeTick(dt);
     for(const c of cars){if(!c.vis||!c.hl)continue;ctx.globalAlpha=dk*.7;ctx.drawImage(GLOW,c.hl[0]-8,c.hl[1]-8,16,16);ctx.globalAlpha=dk;circ(c.hl[0],c.hl[1],1.4,'#fffbe6');circ(c.tl[0],c.tl[1],1.1,'#ff6b5b')}
     for(const g of glows){ctx.globalAlpha=dk*.85;const r=g[3]*1.6;ctx.drawImage(glowOf(g[2]),g[0]-r,g[1]-r,r*2,r*2)}
     ctx.globalCompositeOperation='source-over';ctx.globalAlpha=1}
-  const bdg=new Set(),bq=S<1?3:S<1.6?2:1,B2=(o,w)=>{if(bq>1){const kk=Math.floor(o.i/bq)+'_'+Math.floor(o.j/bq)+'|'+w;if(bdg.has(kk))return;bdg.add(kk)}B2(o,w)};
+  const bdg=new Set(),bq=S<1?3:S<1.6?2:1,B2=(o,w)=>{if(bq>1){const kk=Math.floor(o.i/bq)+'_'+Math.floor(o.j/bq)+'|'+w;if(bdg.has(kk))return;bdg.add(kk)}badge(o,w)};
   if(S>.42)for(const o of list){if(o.kind!=='bld')continue;
     if(view==='power'){if(!o.power&&(o.stage>0||o.road))B2(o,'power')}
     else if(view==='water'){if(o.stage>0&&(!o.water||!o.clean))B2(o,!o.water?'water':'dirty')}
@@ -2544,7 +2552,7 @@ function fitTiles(i0,j0,i1,j1){const cs=[toV(i0,j0),toV(i1,j0),toV(i1,j1),toV(i0
   const padT=hudB+10,padB=100;const s=Math.min((W-120)/(x1-x0),(H-padT-padB)/(y1-y0));return{s,x:(x0+x1)/2,y:(y0+y1)/2-(padT-padB)/2/s}}
 function setView(v){S=v.s;cam.x=v.x;cam.y=v.y;clampCam()}
 function clampCam(){S=Math.max(SMIN,Math.min(SMAX,S));cam.x=Math.max(-N*TW,Math.min(N*TW,cam.x));cam.y=Math.max(-60,Math.min(2*N*TH,cam.y))}
-function zoomAt(sx,sy,ns){const wx=(sx-OX)/S,wy=(sy-OY)/S;S=Math.max(SMIN,Math.min(SMAX,ns));cam.x=wx-(sx-W/2)/S;cam.y=wy-(sy-H/2)/S;clampCam()}
+function zoomAt(sx,sy,ns){const wx=cam.x+(sx-W/2)/S,wy=cam.y+(sy-H/2)/S;S=Math.max(SMIN,Math.min(SMAX,ns));cam.x=wx-(sx-W/2)/S;cam.y=wy-(sy-H/2)/S;clampCam()}
 function screenToWorld(lx,ly){const x=(lx-OX)/S,y=(ly-OY)/S,vi=(y/TH+x/TW)/2,vj=(y/TH-x/TW)/2;return fromV(vi,vj)}
 function screenTile(lx,ly){if(MAXH){const x=(lx-OX)/S,y0=(ly-OY)/S;for(let L=MAXH;L>=1;L--){const y=y0+L*HZ,vi=(y/TH+x/TW)/2,vj=(y/TH-x/TW)/2,w=fromV(vi,vj),ti=Math.floor(w[0]),tj=Math.floor(w[1]);if(inb(ti,tj)&&mount[ix(ti,tj)]===L)return[ti,tj]}}const[a,b]=screenToWorld(lx,ly);return[Math.floor(a),Math.floor(b)]}
 function rotate(dir){const c=screenToWorld(W/2,H/2);rot=(rot+dir+4)%4;const v=toV(c[0],c[1]),p=P(v[0],v[1]);cam.x=p[0];cam.y=p[1];clampCam();snd('tick')}
@@ -2766,7 +2774,9 @@ function expandLand(){const nx=UL.step===0?6000:UL.step===1?12000:0;if(!nx||!unl
   pushLog('국토 개발로 땅을 넓혔어요. 숲을 밀고 지을 수 있어요.');afterEdit();renderDrawer(true);save()}
 
 /* ================= 창 ================= */
-function openModal(html,wide){$('mcard').className='mcard'+(wide?' wide':'');$('mcard').innerHTML=html;$('modal').hidden=false;modalOpen=true;drag=null;closeFly()}
+let uiClick=false,holdT=0;addEventListener('click',()=>{uiClick=true;setTimeout(()=>{uiClick=false},0)},true);
+function openModal(html,wide){$('mcard').className='mcard'+(wide?' wide':'');$('mcard').innerHTML=html;$('modal').hidden=false;modalOpen=true;drag=null;closeFly();
+  clearTimeout(holdT);if(!uiClick&&!demo){$('mcard').classList.add('hold');holdT=setTimeout(()=>$('mcard').classList.remove('hold'),700)}}
 function closeModal(){$('modal').hidden=true;modalOpen=false}
 function savedInfo(){try{const d=JSON.parse(localStorage.getItem(SAVEKEY)||'null');if(!d||!(d.v>=2&&d.v<=4))return null;return d}catch(e){return null}}
 function showStart(){save();const sv=savedInfo(),st=getStars();
@@ -2777,7 +2787,7 @@ function showStart(){save();const sv=savedInfo(),st=getStars();
   {const ns=SCK.reduce((a,k)=>a+(st[k]||0),0);cards.push(['scen','시나리오',SCK.map(k=>SCEN[k].name).join(' · ')+'. 고장 난 도시를 짧은 시간 안에 고쳐요.',ns?'★ '+ns+' / 9':'짧은 문제 3개',false,'water','#2fa3d6'])}
   cards.push(['free','자유 모드','내 도시에 이름을 짓고 마음껏 키워요. 승격하면 놀이공원·경기장 같은 명소가 열려요.','',false,'city','#8d6fd1']);
   cards.push(['demo','자동 시연 보기','미션마다 1~2분짜리 시연 10개. 지금 게임 규칙 그대로 하는 방법을 보여 드려요.','',false,'eye','#5c6878']);
-  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.42</div></div></div><div class="modes" style="margin-top:14px">'+
+  openModal('<div class="hero"><div class="logo">'+ico('city',32)+'</div><div><h2 style="margin:0">우리 동네 짓기</h2><div style="color:#6b7783;font-size:14px">건설기술 도시 게임 v0.44</div></div></div><div class="modes" style="margin-top:14px">'+
     cards.map(([act,t1,d,tag,main,ic,col])=>'<button type="button" class="mode'+(main?' main':'')+'" data-act="'+act+'"><div class="ci" style="background:'+col+'">'+ico(ic,22)+'</div><div>'+(tag?'<i>'+esc(tag)+'</i>':'')+'<b>'+esc(t1)+'</b><span>'+esc(d)+'</span></div></button>').join('')+
     '</div>'+('<div class="slotrow"><button type="button" class="slotbtn" id="slotBtn">'+ico('save',16)+'<span>저장 칸 '+slotCount()+' / '+SLOTN+'</span><small>'+(slotCount()?'다른 도시 불러오기 · 지우기 · 파일':'파일에서 도시 불러오기')+'</small></button></div>'),true);
   if($('slotBtn'))$('slotBtn').onclick=()=>{snd('tick');slotPick()};
@@ -2804,8 +2814,8 @@ function scenarioIntro(){const s=SCEN[scId];openModal('<div class="eyebrow">'+ic
 function save(){if(idle||demo||flags.demoCity)return;try{const d={v:4,hv:[...hv].reduce((a,v,k)=>(v&&a.push(k),a),[]),hz:[...mount].reduce((a,v,k)=>(v!==MAPD.mount[k]&&a.push([k,v]),a),[]),tun:[...tun].reduce((a,v,k)=>(v&&a.push(k),a),[]),map:MAPD.id,seed:MAPD.seed,mode,scId,missionIdx,unlocked:[...unlocked],flags,money,hours,windIdx,UL,goalStart:goal?goal.start:null,goalState,pop:stat.pop||0,cityName,tax,debt,quests,levee:[...levee].reduce((a,v,k)=>(v&&a.push(k),a),[]),
   at:Date.now(),label:mode==='campaign'?cityName+' · 미션 '+(missionIdx+1):mode==='scenario'?'시나리오 · '+SCEN[scId].name:flags.ch?cityName+' · '+(flags.ch.min||15)+'분 도전':cityName+' · 자유 모드',
   road:[...road].reduce((a,v,k)=>(v&&a.push(k),a),[]),av:[...road].reduce((a,v,k)=>(v===2&&a.push(k),a),[]),things:things.map(o=>[o.kind,o.i,o.j,o.w,o.d,o.type||0,o.stage||0,o.seed||0,o.pine?1:0,o.build||0,o.sz||1,o.ruin||0,o.fence||0,o.ext||0,Math.round(o.fv||0),Math.round((o.wear||0)*10)/10,o.H||0,Math.round(o.st||0),o.aq==null?-1:Math.round(o.aq*10)/10,o.btT?Math.round(o.btT*100)/100:0,o.halt?Math.round(o.halt*10)/10:0,Math.round(o.gs||0),o.den||0,o.lux?1:0]),sns:SNS.slice(0,15),ret:[...ret].reduce((a,v,k)=>(v&&a.push(k),a),[]),quay:[...quay].reduce((a,v,k)=>(v&&a.push(k),a),[]),nwr:[...nwr].reduce((a,v,k)=>(v&&road[k]&&a.push(k),a),[]),rw:[...rw].reduce((a,v,k)=>(road[k]&&v>=1&&a.push([k,Math.round(v)]),a),[])};
-  localStorage.setItem(SAVEKEY,JSON.stringify(d))}catch(e){}}
-function load(){const d=savedInfo();if(!d)return false;try{baseWorld(d.map||'classic',d.seed||0);mode=d.mode;scId=d.scId;missionIdx=d.missionIdx||0;unlocked=new Set(d.unlocked);money=d.money;hours=d.hours;lastHour=Math.floor(hours);windIdx=d.windIdx;UL=d.UL||Object.assign({step:0},MAPD.ul);newTools=new Set();
+  localStorage.setItem(SAVEKEY,JSON.stringify(d))}catch(e){if(!window.__saveWarn){window.__saveWarn=1;toast('이 기기는 저장이 안 돼요. [현황] 맨 아래 [이 도시를 파일로 내보내기]로 남겨 주세요.')}}}
+function load(){const d=scrubSave(savedInfo());if(!d)return false;try{baseWorld(d.map||'classic',d.seed||0);mode=d.mode;scId=d.scId;missionIdx=d.missionIdx||0;unlocked=new Set(d.unlocked);money=d.money;hours=d.hours;lastHour=Math.floor(hours);windIdx=d.windIdx;UL=d.UL||Object.assign({step:0},MAPD.ul);newTools=new Set();
   flags=Object.assign({nextQuest:hours+5,nextDisaster:null,rank:0,floodAt:-1,floodUntil:-1,disasters:mode!=='scenario',quests:mode!=='scenario'},d.flags||{});
   cityName=d.cityName||'우리 동네';dmode=flags.dm||3;tax=d.tax!=null?d.tax:9;debt=d.debt||0;quests=(d.quests||[]).filter(q=>QDEF[q.id]);if(d.levee)for(const k of d.levee)levee[k]=1;if(d.rw)for(const[k,v]of d.rw)rw[k]=v;SNS=d.sns||[];snsNew=0;if(mode==='free'||(mode==='campaign'&&missionIdx>=4)){unlocked.add('battery');unlocked.add('pumped')}if(d.ret)for(const k of d.ret)ret[k]=1;if(d.quay)for(const k of d.quay)quay[k]=1;if(d.nwr)for(const k of d.nwr)nwr[k]=1;if(flags.lake)for(const[k,nd]of flags.lake){water[k]=1;MAPD.nodeOf[k]=nd}if(mode==='free'||(mode==='campaign'&&missionIdx>=2)){unlocked.add('quay');unlocked.add('rwall')}if(mode==='free'||(mode==='campaign'&&missionIdx>=5))unlocked.add('dam');if(mode==='free'||(mode==='campaign'&&missionIdx>=3))unlocked.add('depot');if(mode==='free'||(mode==='campaign'&&missionIdx>=2))unlocked.add('nwall');if(mode==='free'||(mode==='campaign'&&missionIdx>=3))unlocked.add('outlet');if(mode==='free'||(mode==='campaign'&&missionIdx>=4)){unlocked.add('landfill');unlocked.add('clinic')}if(mode==='free'||(mode==='campaign'&&missionIdx>=5))for(const u of['incin','recycle','hospital'])unlocked.add(u);
   for(const k of d.road)road[k]=1;if(d.av)for(const k of d.av)road[k]=2;
@@ -3273,6 +3283,12 @@ function slotPick(){let rows='';for(let n=1;n<=SLOTN;n++){const d=slotInfo(n);
 /* v0.42: 도시를 파일로 내보내고 불러오기 — 저장은 이 기기 브라우저에만 남으니, 다른 기기에서 이어 하거나 선생님께 낼 때 */
 const fileStamp=()=>{const d=new Date();return (d.getMonth()+1)+'월'+d.getDate()+'일_'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0')};
 const okSave=d=>!!d&&d.v>=2&&d.v<=4&&Array.isArray(d.things)&&Array.isArray(d.road)&&d.map!=null;
+const okCol=c=>typeof c==='string'&&/^#[0-9a-fA-F]{3,8}$/.test(c);
+function scrubSave(d){const w=(x,dep)=>{if(typeof x==='string')return x.replace(/[<>]/g,'').slice(0,300);if(x&&typeof x==='object'&&dep<8){if(Array.isArray(x)){for(let k=0;k<x.length;k++){const v=x[k];if(typeof v==='string'||(v&&typeof v==='object'))x[k]=w(v,dep+1)}}else for(const k of Object.keys(x)){const v=x[k];if(typeof v==='string'||(v&&typeof v==='object'))x[k]=w(v,dep+1)}}return x};
+  if(!d||typeof d!=='object')return d;w(d,0);
+  if(Array.isArray(d.quests))d.quests=d.quests.filter(q=>q&&typeof q==='object').map(q=>{if(!okCol(q.col))q.col='#4f7fc4';q.who=String(q.who||'주민').slice(0,12);for(const k of['need','base','until','rw','oi','oj'])q[k]=+q[k]||0;return q});else d.quests=[];
+  if(Array.isArray(d.sns))d.sns=d.sns.filter(p=>p&&typeof p==='object').slice(0,30).map(p=>({h:+p.h||0,who:String(p.who||'').slice(0,24),txt:String(p.txt||'').slice(0,200),good:!!p.good,face:[...String(p.face||'')].slice(0,2).join('')}));else d.sns=[];
+  d.cityName=String(d.cityName||'우리 동네').slice(0,20);for(const k of['money','hours','tax','debt'])if(d[k]!=null)d[k]=+d[k]||0;return d}
 async function exportCity(n){let raw=null;try{raw=localStorage.getItem(slotKey(n))}catch(e){}
   if(!raw){toast('내보낼 도시가 없어요. 먼저 도시를 지어 주세요.');return}
   let d=null;try{d=JSON.parse(raw)}catch(e){}if(!okSave(d)){toast('이 칸의 저장이 망가져서 내보낼 수 없어요.');return}
@@ -3284,7 +3300,7 @@ function importCity(){const inp=document.createElement('input');inp.type='file';
   inp.onchange=()=>{const f=inp.files&&inp.files[0];if(!f)return;if(f.size>8e6){toast('파일이 너무 커요. 우리 동네 짓기에서 내보낸 파일을 골라 주세요.');return}
     const rd=new FileReader();rd.onerror=()=>toast('파일을 읽지 못했어요.');
     rd.onload=()=>{let d=null;try{d=JSON.parse(String(rd.result))}catch(e){}
-      if(!okSave(d)){snd('warn');toast('우리 동네 짓기 도시 파일이 아니에요. [파일로]로 내보낸 .json 파일을 골라 주세요.');return}
+      if(!okSave(d)){snd('warn');toast('우리 동네 짓기 도시 파일이 아니에요. [파일로]로 내보낸 .json 파일을 골라 주세요.');return}scrubSave(d);
       const n=freeSlot()||curSlot;try{localStorage.setItem(slotKey(n),JSON.stringify(d))}catch(e){toast('이 기기에 저장할 공간이 모자라서 불러오지 못했어요.');return}
       setSlot(n);closeModal();sel=null;idle=false;
       if(!load()){newCity({mode:'campaign'});setTimeout(()=>toast('파일 속 도시를 불러오지 못해서 새로 시작했어요.'),600)}
